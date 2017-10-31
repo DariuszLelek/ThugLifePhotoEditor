@@ -13,18 +13,28 @@ import java.util.concurrent.ConcurrentHashMap;
  * dariusz.lelek@gmail.com
  */
 
-public class ConfigHelper {
+public class ConfigUtility {
     private final Resources resources;
     private final SharedPreferences preferences;
     private final Map<Integer, String> cachedKeys = new ConcurrentHashMap<>();
 
-    public ConfigHelper(Resources resources, SharedPreferences preferences) {
+    public ConfigUtility(Resources resources, SharedPreferences preferences) {
         this.resources = resources;
         this.preferences = preferences;
     }
 
     public boolean adsEnabled(){
-        return preferences.getBoolean(getKey(R.string.key_ads_enabled), false);
+        return preferences.getBoolean(getKey(R.string.key_ads_enabled), DefaultConfig.ADS_ENABLED.getBooleanValue());
+    }
+
+    public int get(int keyId, int defaultValue){
+        return preferences.getInt(getKey(keyId), defaultValue);
+    }
+
+    public void save(int keyId, int value){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(getKey(keyId), value);
+        editor.apply();
     }
 
     private String getKey(int keyId) {
