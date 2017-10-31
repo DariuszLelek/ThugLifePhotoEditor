@@ -7,7 +7,7 @@
         android:fullBackupContent="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/FullScreenTheme">
         <activity android:name=".EditorActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
