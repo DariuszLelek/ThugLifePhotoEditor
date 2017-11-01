@@ -30,9 +30,9 @@ public class BitmapUtility {
         return null;
     }
 
-    public static Bitmap getScaledBitmap(Bitmap original, int width, int height, boolean keepAspect){
+    public static Bitmap getScaledBitmap(Bitmap original, int width){
         return Bitmap.createScaledBitmap(original, width,
-                keepAspect ? Math.round(original.getHeight() * width / original.getWidth()) : height, false);
+                Math.round(original.getHeight() * width / original.getWidth()), false);
     }
 
     public static Bitmap rotateBitmapRight(Bitmap bitmap){

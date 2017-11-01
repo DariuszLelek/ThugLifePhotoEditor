@@ -101,17 +101,20 @@ public class EditorActivity extends AppCompatActivity {
     private void processPictureInsert(Bitmap bitmap){
         if(bitmap != null){
             imageEditor.setOriginalBitmap(bitmap);
-            Bitmap scaled = imageEditor.getBitmapScaledToDimensions(
-                    configUtility.get(R.string.key_image_width, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()),
-                    configUtility.get(R.string.key_image_height, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()), true);
-            imagePicture.setImageBitmap(scaled);
-            //scaled.recycle();
+            showScaledBitmap();
         }
+    }
+
+    private void showScaledBitmap(){
+        Bitmap scaled = imageEditor.getBitmapScaledToDimensions(
+                configUtility.get(R.string.key_image_width, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()));
+        imagePicture.setImageBitmap(scaled);
     }
 
     public void onRotateClick(View view){
         if(imageEditor.isOriginalBitmapSet()){
-
+            imageEditor.rotateOriginalBitmap();
+            showScaledBitmap();
         }
     }
 

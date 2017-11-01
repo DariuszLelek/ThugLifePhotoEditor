@@ -1,8 +1,11 @@
 package com.darodev.thuglifephotoeditor.image;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
+import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
 
 /**
  * Created by Dariusz Lelek on 10/31/2017.
@@ -18,6 +21,10 @@ public class ImageEditor {
 
     public void setOriginalBitmap(Bitmap originalBitmap) {
         this.originalBitmap = originalBitmap;
+
+        if(originalBitmap.getWidth() > DefaultConfig.IMAGE_MAX_WIDTH.getIntValue()){
+            this.originalBitmap = getBitmapScaledToDimensions(DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
+        }
     }
 
     public boolean isOriginalBitmapSet(){
@@ -28,11 +35,17 @@ public class ImageEditor {
         return scaledBitmap != null;
     }
 
-    public Bitmap getBitmapScaledToDimensions(int width, int height, boolean keepAspect) {
+    public Bitmap getBitmapScaledToDimensions(int width) {
         if(isOriginalBitmapSet()){
-            return BitmapUtility.getScaledBitmap(originalBitmap, width, height, keepAspect);
+            return BitmapUtility.getScaledBitmap(originalBitmap, width);
         }
         return null;
+    }
+
+    public void rotateOriginalBitmap(){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        originalBitmap = Bitmap.createBitmap(originalBitmap, 0,0, originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, false);
     }
 
     // TODO public?
