@@ -1,10 +1,11 @@
 package com.darodev.thuglifephotoeditor.image;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 
+import com.darodev.thuglifephotoeditor.R;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
+import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
 
 /**
@@ -13,52 +14,57 @@ import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
  */
 
 public class ImageEditor {
-    private Bitmap originalBitmap, scaledBitmap;
+    private Bitmap bitmap;
+    private int orientation;
+    private final ConfigUtility configUtility;
 
-    public ImageEditor() {
-        clearBitmaps();
-    }
+    public ImageEditor(BitmapHolder bitmapHolder, ConfigUtility configUtility) {
+        this.configUtility = configUtility;
 
-    public void setOriginalBitmap(Bitmap originalBitmap) {
-        this.originalBitmap = originalBitmap;
+        this.bitmap = bitmapHolder.getBitmap();
+        this.orientation = bitmapHolder.getOrientation();
 
-        if(originalBitmap.getWidth() > DefaultConfig.IMAGE_MAX_WIDTH.getIntValue()){
-            this.originalBitmap = getBitmapScaledToDimensions(DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
+        scaleBitmapToFitView();
+
+        if (isBitmapRotated()) {
+            rotateBitmapToDefaultOrientation();
         }
     }
 
-    public boolean isOriginalBitmapSet(){
-        return originalBitmap != null;
+    private void rotateBitmapToDefaultOrientation(){
+        bitmap = BitmapUtility.rotate(bitmap, orientation);
+        orientation = 0;
     }
 
-    public boolean isScaledBitmapSet(){
-        return scaledBitmap != null;
+    private void scaleBitmapToFitView(){
+        float maxWidth = configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
+        float scale =  maxWidth / BitmapUtility.getLongerSide(bitmap);
+        bitmap = BitmapUtility.getScaledBitmap(bitmap, scale);
     }
 
-    public Bitmap getBitmapScaledToDimensions(int width) {
-        if(isOriginalBitmapSet()){
-            return BitmapUtility.getScaledBitmap(originalBitmap, width);
-        }
-        return null;
+    private boolean isBitmapRotated(){
+        return orientation > 0;
     }
 
-    public void rotateOriginalBitmap(){
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void rotateBitmap() {
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        originalBitmap = Bitmap.createBitmap(originalBitmap, 0,0, originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, false);
+        int rotationAngle = 90;
+
+        matrix.postRotate(rotationAngle);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        orientation = Math.abs((orientation - rotationAngle + 360) % 360);
     }
 
     // TODO public?
-    public void clearBitmaps(){
-        if(isOriginalBitmapSet()){
-            originalBitmap.recycle();
+    public void recycleBitmap(){
+        if(bitmap != null){
+            bitmap.recycle();
         }
 
-        if(isScaledBitmapSet()){
-            scaledBitmap.recycle();
-        }
-
-        originalBitmap = null;
-        scaledBitmap = null;
+        bitmap = null;
     }
 }

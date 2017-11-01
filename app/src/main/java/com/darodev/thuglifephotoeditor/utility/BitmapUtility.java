@@ -2,11 +2,18 @@ package com.darodev.thuglifephotoeditor.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Build;
+import android.os.Debug;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.darodev.thuglifephotoeditor.image.BitmapHolder;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -16,26 +23,59 @@ import java.io.IOException;
 
 public class BitmapUtility {
 
-    @Nullable
-    public static Bitmap getFromIntentData(Intent intent, Context context) {
+    @NonNull
+    public static BitmapHolder getFromIntentData(Intent intent, Context context) {
         if (intent.getData() == null && intent.getExtras() != null) {
-            return (Bitmap) intent.getExtras().get("data");
+            return new BitmapHolder((Bitmap) intent.getExtras().get("data"), 0);
         } else {
             try {
-                return MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData());
+
+                String[] projection = {MediaStore.Images.ImageColumns.ORIENTATION};
+                Cursor cursor = context.getContentResolver().query(intent.getData(), projection, null, null, null);
+
+                int orientation = -1;
+                if (cursor != null && cursor.moveToFirst()) {
+                    orientation = cursor.getInt(0);
+                    cursor.close();
+                }
+
+                return new BitmapHolder(MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData()),orientation);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return BitmapHolder.EMPTY;
     }
 
-    public static Bitmap getScaledBitmap(Bitmap original, int width){
-        return Bitmap.createScaledBitmap(original, width,
-                Math.round(original.getHeight() * width / original.getWidth()), false);
+    public static Bitmap getScaledBitmap(Bitmap original, float scale) {
+        return Bitmap.createScaledBitmap(
+                original,
+                Math.round(original.getWidth() * scale),
+                Math.round(original.getHeight() * scale),
+                true);
     }
 
-    public static Bitmap rotateBitmapRight(Bitmap bitmap){
-        return null;
+    public static float getLongerSide(Bitmap bitmap){
+        return Math.max(bitmap.getHeight(), bitmap.getWidth());
+    }
+
+    public static Bitmap rotate(Bitmap bitmap, int orientation){
+        if(orientation != 0){
+            Matrix matrix = new Matrix();
+            matrix.postRotate(orientation);
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        }
+        return bitmap;
+    }
+
+    public static boolean canFitInMemory(Bitmap bitmap) {
+        long size = bitmap.getRowBytes() * bitmap.getHeight();
+        long allocNativeHeap = Debug.getNativeHeapAllocatedSize();
+
+        final long heapPad = (long) Math.max(4 * 1024 * 1024, Runtime.getRuntime().maxMemory() * 0.1);
+
+        return (size + allocNativeHeap + heapPad) < Runtime.getRuntime().freeMemory();
     }
 }

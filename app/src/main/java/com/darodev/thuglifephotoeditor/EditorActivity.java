@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,19 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
-import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
-import java.io.IOException;
-
 public class EditorActivity extends AppCompatActivity {
-    private final ImageEditor imageEditor = new ImageEditor();
+    private ImageEditor imageEditor;
 
     private AdView adView;
     private ConfigUtility configUtility;
@@ -50,28 +47,25 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         resources = getResources();
-        editImageView = findViewById(R.id.view_edit_image);
+        configUtility = new ConfigUtility(
+                resources,
+                getSharedPreferences(resources.getString(R.string.app_name), Context.MODE_PRIVATE));
+        imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
 
+        editImageView = findViewById(R.id.view_edit_image);
         editImageView.post(new Runnable() {
             @Override
             public void run() {
                 saveEditImageDimensions();
-
-                editImageView.setDrawingCacheEnabled(true);
-                processPictureInsert(editImageView.getDrawingCache());
             }
         });
-
-        configUtility = new ConfigUtility(
-                resources,
-                getSharedPreferences(resources.getString(R.string.app_name), Context.MODE_PRIVATE));
-
 
         prepareAds();
     }
 
+
+
     private void saveEditImageDimensions(){
-//        configUtility.save(R.string.key_edit_image_height, editImageView.getMeasuredHeight());
         configUtility.save(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
     }
 
@@ -101,7 +95,7 @@ public class EditorActivity extends AppCompatActivity {
     private void dispatchSelectPictureIntent(){
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE);
     }
 
@@ -122,24 +116,19 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    private void processPictureInsert(Bitmap bitmap){
-        if(bitmap != null){
-            imageEditor.setOriginalBitmap(bitmap);
-            showScaledBitmap();
-        }
+    private void processPictureInsert(BitmapHolder bitmapHolder) {
+        imageEditor.recycleBitmap();
+        imageEditor = new ImageEditor(bitmapHolder, configUtility);
+        refreshImageBitmap();
     }
 
-    private void showScaledBitmap(){
-        Bitmap scaled = imageEditor.getBitmapScaledToDimensions(
-                configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()));
-        editImageView.setImageBitmap(scaled);
+    private void refreshImageBitmap(){
+        editImageView.setImageBitmap(imageEditor.getBitmap());
     }
 
     public void onRotateClick(View view){
-        if(imageEditor.isOriginalBitmapSet()){
-            imageEditor.rotateOriginalBitmap();
-            showScaledBitmap();
-        }
+        imageEditor.rotateBitmap();
+        refreshImageBitmap();
     }
 
     private void prepareAds() {
@@ -174,4 +163,6 @@ public class EditorActivity extends AppCompatActivity {
 
         return adView;
     }
+
+
 }
