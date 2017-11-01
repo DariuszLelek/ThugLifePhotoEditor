@@ -1,6 +1,7 @@
 package com.darodev.thuglifephotoeditor;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
@@ -27,17 +29,20 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.IOException;
+
 public class EditorActivity extends AppCompatActivity {
     private final ImageEditor imageEditor = new ImageEditor();
 
     private AdView adView;
     private ConfigUtility configUtility;
     private Resources resources;
-    ImageView imagePicture;
-    private int imageWidth, imageHeight;
+    private ImageView editImageView;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
+    static final int SELECT_IMAGE = 5602;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,15 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         resources = getResources();
-        imagePicture = findViewById(R.id.image_picture);
+        editImageView = findViewById(R.id.view_edit_image);
 
-        imagePicture.post(new Runnable() {
+        editImageView.post(new Runnable() {
             @Override
             public void run() {
-                configUtility.save(R.string.key_image_height, imagePicture.getMeasuredHeight());
-                configUtility.save(R.string.key_image_width, imagePicture.getMeasuredWidth());
+                saveEditImageDimensions();
+
+                editImageView.setDrawingCacheEnabled(true);
+                processPictureInsert(editImageView.getDrawingCache());
             }
         });
 
@@ -63,12 +70,21 @@ public class EditorActivity extends AppCompatActivity {
         prepareAds();
     }
 
+    private void saveEditImageDimensions(){
+//        configUtility.save(R.string.key_edit_image_height, editImageView.getMeasuredHeight());
+        configUtility.save(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
+    }
+
     public void btnTakePicture(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             dispatchTakePictureIntent();
         } else {
             requestCameraPermission();
         }
+    }
+
+    public void onSelectPictureClick(View view) {
+        dispatchSelectPictureIntent();
     }
 
     private void dispatchTakePictureIntent() {
@@ -82,10 +98,16 @@ public class EditorActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
     }
 
+    private void dispatchSelectPictureIntent(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if(requestCode == REQUEST_CAMERA_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             dispatchTakePictureIntent();
         }
@@ -93,8 +115,10 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == SELECT_IMAGE) && resultCode == RESULT_OK) {
             processPictureInsert(BitmapUtility.getFromIntentData(data, getApplicationContext()));
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -107,8 +131,8 @@ public class EditorActivity extends AppCompatActivity {
 
     private void showScaledBitmap(){
         Bitmap scaled = imageEditor.getBitmapScaledToDimensions(
-                configUtility.get(R.string.key_image_width, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()));
-        imagePicture.setImageBitmap(scaled);
+                configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_DEFAULT_WIDTH.getIntValue()));
+        editImageView.setImageBitmap(scaled);
     }
 
     public void onRotateClick(View view){

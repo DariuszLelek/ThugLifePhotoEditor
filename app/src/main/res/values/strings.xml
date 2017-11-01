@@ -3,8 +3,8 @@
 
     <!--prefs-->
     <string name="key_ads_enabled">adsEnabled</string>
-    <string name="key_image_width">imageWidth</string>
-    <string name="key_image_height">imageHeight</string>
+    <string name="key_edit_image_width">editImageWidth</string>
+    <!--<string name="key_edit_image_height">editImageWeight</string>-->
 
 
     <string name="content_desc_picture">Picture to edit</string>

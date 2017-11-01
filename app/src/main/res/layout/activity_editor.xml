@@ -15,12 +15,12 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/image_picture"
+            android:id="@+id/view_edit_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/content_desc_picture"
             android:scaleType="center"
-            app:srcCompat="@mipmap/ic_launcher"/>
+            />
 
         <Button
             android:id="@+id/button2"
@@ -36,6 +36,14 @@
             android:layout_gravity="end"
             android:onClick="onRotateClick"
             android:text="rotate"/>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onSelectPictureClick"
+            android:text="pic"/>
     </FrameLayout>
 
     <LinearLayout
