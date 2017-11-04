@@ -1,11 +1,14 @@
 package com.darodev.thuglifephotoeditor;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -13,7 +16,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +27,7 @@ import android.widget.Toast;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
+import com.darodev.thuglifephotoeditor.image.layer.ImageLayerController;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.google.android.gms.ads.AdRequest;
@@ -30,11 +37,13 @@ import com.google.android.gms.ads.MobileAds;
 
 public class EditorActivity extends AppCompatActivity {
     private ImageEditor imageEditor;
+    private ImageLayerController imageLayerController;
 
     private AdView adView;
     private ConfigUtility configUtility;
     private Resources resources;
     private ImageView editImageView;
+    private Button btnRotate;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
@@ -47,11 +56,11 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         resources = getResources();
-        configUtility = new ConfigUtility(
-                resources,
-                getSharedPreferences(resources.getString(R.string.app_name), Context.MODE_PRIVATE));
+        configUtility = createConfigUtility();
+        imageLayerController = createImageLayerController();
         imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
 
+        btnRotate = findViewById(R.id.btn_rotate);
         editImageView = findViewById(R.id.view_edit_image);
         editImageView.post(new Runnable() {
             @Override
@@ -60,10 +69,33 @@ public class EditorActivity extends AppCompatActivity {
             }
         });
 
+        prepareLayerListener();
         prepareAds();
     }
 
+    private ConfigUtility createConfigUtility(){
+        return new ConfigUtility(
+                resources,
+                getSharedPreferences(resources.getString(R.string.app_name), Context.MODE_PRIVATE));
+    }
 
+    private ImageLayerController createImageLayerController(){
+        return new ImageLayerController(
+                this.getApplicationContext(),
+                (ImageView) findViewById(R.id.view_image_default_layer),
+                (FrameLayout) findViewById(R.id.layout_image_layer));
+    }
+
+    private void prepareLayerListener(){
+        findViewById(R.id.layout_image_layer).setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                return false;
+            }
+        });
+    }
 
     private void saveEditImageDimensions(){
         configUtility.save(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
@@ -131,6 +163,21 @@ public class EditorActivity extends AppCompatActivity {
         refreshImageBitmap();
     }
 
+    public void onAddBitmapClick(View view){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2);
+        imageLayerController.addLayer(BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0));
+        updateRefreshButton();
+    }
+
+    public void onRemoveBitmapClick(View view){
+        imageLayerController.removeTopLayer();
+        updateRefreshButton();
+    }
+
+    private void updateRefreshButton(){
+        btnRotate.setEnabled(!imageLayerController.hasTopLayer());
+    }
+
     private void prepareAds() {
         if (configUtility.adsEnabled()) {
             LinearLayout add_holder = findViewById(R.id.layout_ad);
@@ -160,9 +207,6 @@ public class EditorActivity extends AppCompatActivity {
 
             adView.loadAd(adRequest);
         }
-
         return adView;
     }
-
-
 }

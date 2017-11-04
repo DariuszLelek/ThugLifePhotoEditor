@@ -8,4 +8,5 @@
 
 
     <string name="content_desc_picture">Picture to edit</string>
+    <string name="default_layer">Default layer to be copied for inserting new bitmaps</string>
 </resources>

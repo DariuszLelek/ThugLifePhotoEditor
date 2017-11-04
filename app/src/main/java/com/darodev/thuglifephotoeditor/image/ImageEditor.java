@@ -45,7 +45,7 @@ public class ImageEditor {
         image = BitmapUtility.getScaledBitmap(image, scale);
     }
 
-    private boolean isImageRotated(){
+    public boolean isImageRotated(){
         return rotationDegrees > 0;
     }
 
