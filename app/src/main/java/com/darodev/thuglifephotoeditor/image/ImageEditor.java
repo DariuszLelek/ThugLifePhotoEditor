@@ -1,7 +1,6 @@
 package com.darodev.thuglifephotoeditor.image;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 import com.darodev.thuglifephotoeditor.R;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
@@ -14,57 +13,57 @@ import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
  */
 
 public class ImageEditor {
-    private Bitmap bitmap;
-    private int orientation;
+    private Bitmap image;
+    private int rotationDegrees;
     private final ConfigUtility configUtility;
 
     public ImageEditor(BitmapHolder bitmapHolder, ConfigUtility configUtility) {
         this.configUtility = configUtility;
 
-        this.bitmap = bitmapHolder.getBitmap();
-        this.orientation = bitmapHolder.getOrientation();
+        this.image = bitmapHolder.getBitmap();
+        this.rotationDegrees = bitmapHolder.getRotationDegrees();
 
         scaleBitmapToFitView();
 
-        if (isBitmapRotated()) {
-            rotateBitmapToDefaultOrientation();
+        if (isImageRotated()) {
+            rotateImageToDefaultOrientation();
+            resetRotation();
         }
     }
 
-    private void rotateBitmapToDefaultOrientation(){
-        bitmap = BitmapUtility.rotate(bitmap, orientation);
-        orientation = 0;
+    private void rotateImageToDefaultOrientation(){
+        image = BitmapUtility.rotate(image, rotationDegrees);
+    }
+
+    private void resetRotation(){
+        this.rotationDegrees = 0;
     }
 
     private void scaleBitmapToFitView(){
         float maxWidth = configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
-        float scale =  maxWidth / BitmapUtility.getLongerSide(bitmap);
-        bitmap = BitmapUtility.getScaledBitmap(bitmap, scale);
+        float scale =  maxWidth / BitmapUtility.getLongerSide(image);
+        image = BitmapUtility.getScaledBitmap(image, scale);
     }
 
-    private boolean isBitmapRotated(){
-        return orientation > 0;
+    private boolean isImageRotated(){
+        return rotationDegrees > 0;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public Bitmap getImage() {
+        return image;
     }
 
-    public void rotateBitmap() {
-        Matrix matrix = new Matrix();
-        int rotationAngle = 90;
-
-        matrix.postRotate(rotationAngle);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        orientation = Math.abs((orientation - rotationAngle + 360) % 360);
+    public void rotateImage() {
+        image = BitmapUtility.rotate(image, rotationDegrees > 0 ? -90 : 90);
+        rotationDegrees = rotationDegrees > 0 ? 0 : 90;
     }
 
     // TODO public?
     public void recycleBitmap(){
-        if(bitmap != null){
-            bitmap.recycle();
+        if(image != null){
+            image.recycle();
         }
 
-        bitmap = null;
+        image = null;
     }
 }

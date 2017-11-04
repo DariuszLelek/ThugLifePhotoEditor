@@ -13,11 +13,11 @@ public class BitmapHolder {
     public static final BitmapHolder EMPTY = new BitmapHolder(null, 0);
 
     private final Bitmap bitmap;
-    private final int orientation;
+    private final int rotationDegrees;
 
-    public BitmapHolder(@Nullable Bitmap bitmap, int orientation) {
+    public BitmapHolder(@Nullable Bitmap bitmap, int rotationDegrees) {
         this.bitmap = bitmap != null ? bitmap : getEmptyBitmap();
-        this.orientation = orientation;
+        this.rotationDegrees = rotationDegrees;
     }
 
     private Bitmap getEmptyBitmap(){
@@ -29,8 +29,8 @@ public class BitmapHolder {
         return bitmap;
     }
 
-    public int getOrientation() {
-        return orientation;
+    public int getRotationDegrees() {
+        return rotationDegrees;
     }
 
     public boolean hasBitmap(){

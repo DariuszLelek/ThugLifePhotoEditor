@@ -123,11 +123,11 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void refreshImageBitmap(){
-        editImageView.setImageBitmap(imageEditor.getBitmap());
+        editImageView.setImageBitmap(imageEditor.getImage());
     }
 
     public void onRotateClick(View view){
-        imageEditor.rotateBitmap();
+        imageEditor.rotateImage();
         refreshImageBitmap();
     }
 

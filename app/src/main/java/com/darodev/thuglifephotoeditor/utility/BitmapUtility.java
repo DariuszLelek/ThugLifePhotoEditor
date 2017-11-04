@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.os.Build;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 
@@ -33,13 +31,13 @@ public class BitmapUtility {
                 String[] projection = {MediaStore.Images.ImageColumns.ORIENTATION};
                 Cursor cursor = context.getContentResolver().query(intent.getData(), projection, null, null, null);
 
-                int orientation = -1;
+                int rotationDegrees = -1;
                 if (cursor != null && cursor.moveToFirst()) {
-                    orientation = cursor.getInt(0);
+                    rotationDegrees = cursor.getInt(0);
                     cursor.close();
                 }
 
-                return new BitmapHolder(MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData()),orientation);
+                return new BitmapHolder(MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData()),rotationDegrees);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -61,10 +59,10 @@ public class BitmapUtility {
         return Math.max(bitmap.getHeight(), bitmap.getWidth());
     }
 
-    public static Bitmap rotate(Bitmap bitmap, int orientation){
-        if(orientation != 0){
+    public static Bitmap rotate(Bitmap bitmap, int degrees){
+        if(degrees != 0){
             Matrix matrix = new Matrix();
-            matrix.postRotate(orientation);
+            matrix.postRotate(degrees);
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
         return bitmap;
