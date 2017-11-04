@@ -39,6 +39,14 @@ public class ImageLayerController {
         return !imageLayers.isEmpty();
     }
 
+    public void processImageMove(float x, float y){
+
+    }
+
+    public void processImageResizeRotate(float x, float y){
+
+    }
+
     /**
      * Add new Layer over image with selected Bitmap
      */

@@ -23,9 +23,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
+import com.darodev.thuglifephotoeditor.image.ImageEditMode;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
 import com.darodev.thuglifephotoeditor.image.layer.ImageLayerController;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
@@ -34,6 +36,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+
+import org.w3c.dom.Text;
 
 public class EditorActivity extends AppCompatActivity {
     private ImageEditor imageEditor;
@@ -44,6 +48,7 @@ public class EditorActivity extends AppCompatActivity {
     private Resources resources;
     private ImageView editImageView;
     private Button btnRotate, btnRemoveBitmap;
+    private TextView textEditMode;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
@@ -62,6 +67,7 @@ public class EditorActivity extends AppCompatActivity {
 
         btnRotate = findViewById(R.id.btn_rotate);
         btnRemoveBitmap = findViewById(R.id.btn_remove_bitmap);
+        textEditMode = findViewById(R.id.txt_edit_mode);
 
         editImageView = findViewById(R.id.view_edit_image);
         editImageView.post(new Runnable() {
@@ -72,6 +78,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
         updateRemoveBitmapButton();
+        updateEditModeDisplay();
 
         prepareLayerListener();
         prepareAds();
@@ -94,15 +101,36 @@ public class EditorActivity extends AppCompatActivity {
         btnRemoveBitmap.setEnabled(imageLayerController.hasTopLayer());
     }
 
-    private void prepareLayerListener(){
+    private void prepareLayerListener() {
         findViewById(R.id.layout_image_layer).setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    imageEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
+                    updateEditModeDisplay();
+
+                    if(imageEditor.getCurrentEditMode() == ImageEditMode.MOVE){
+                        imageLayerController.processImageMove(motionEvent.getX(), motionEvent.getY());
+                    }else if(imageEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
+                        imageLayerController.processImageResizeRotate(motionEvent.getX(), motionEvent.getY());
+                    }
+
+                    return true;
+                }
+
+                if(motionEvent.getPointerCount() == 1){
+                    imageEditor.setCurrentEditMode(ImageEditMode.NONE);
+                    updateEditModeDisplay();
+                }
 
                 return false;
             }
         });
+    }
+
+    private void updateEditModeDisplay(){
+        textEditMode.setText(imageEditor.getCurrentEditMode().toString());
     }
 
     private void saveEditImageDimensions(){

@@ -15,6 +15,8 @@ import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
 public class ImageEditor {
     private Bitmap image;
     private int rotationDegrees;
+    private ImageEditMode currentEditMode = ImageEditMode.NONE;
+
     private final ConfigUtility configUtility;
 
     public ImageEditor(BitmapHolder bitmapHolder, ConfigUtility configUtility) {
@@ -47,6 +49,22 @@ public class ImageEditor {
 
     public boolean isImageRotated(){
         return rotationDegrees > 0;
+    }
+
+    public ImageEditMode getCurrentEditMode() {
+        return currentEditMode;
+    }
+
+    public void setCurrentEditMode(ImageEditMode currentEditMode) {
+        this.currentEditMode = currentEditMode;
+    }
+
+    public void setCurrentEditModeByTouchCount(int touchCount) {
+        if(touchCount == 1 && currentEditMode.isLowerThan(ImageEditMode.MOVE)){
+            this.currentEditMode = ImageEditMode.MOVE;
+        }else if (touchCount == 2){
+            this.currentEditMode = ImageEditMode.ROTATE_RESIZE;
+        }
     }
 
     public Bitmap getImage() {
