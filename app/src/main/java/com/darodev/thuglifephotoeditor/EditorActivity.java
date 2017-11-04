@@ -43,7 +43,7 @@ public class EditorActivity extends AppCompatActivity {
     private ConfigUtility configUtility;
     private Resources resources;
     private ImageView editImageView;
-    private Button btnRotate;
+    private Button btnRotate, btnRemoveBitmap;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
@@ -61,6 +61,8 @@ public class EditorActivity extends AppCompatActivity {
         imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
 
         btnRotate = findViewById(R.id.btn_rotate);
+        btnRemoveBitmap = findViewById(R.id.btn_remove_bitmap);
+
         editImageView = findViewById(R.id.view_edit_image);
         editImageView.post(new Runnable() {
             @Override
@@ -68,6 +70,8 @@ public class EditorActivity extends AppCompatActivity {
                 saveEditImageDimensions();
             }
         });
+
+        updateRemoveBitmapButton();
 
         prepareLayerListener();
         prepareAds();
@@ -84,6 +88,10 @@ public class EditorActivity extends AppCompatActivity {
                 this.getApplicationContext(),
                 (ImageView) findViewById(R.id.view_image_default_layer),
                 (FrameLayout) findViewById(R.id.layout_image_layer));
+    }
+
+    private void updateRemoveBitmapButton(){
+        btnRemoveBitmap.setEnabled(imageLayerController.hasTopLayer());
     }
 
     private void prepareLayerListener(){
@@ -164,14 +172,20 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void onAddBitmapClick(View view){
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2);
-        imageLayerController.addLayer(BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0));
+        imageLayerController.addLayer(
+                BitmapUtility.rotate(
+                        BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
+                        imageEditor.isImageRotated() ? 90 : 0));
+
         updateRefreshButton();
+        updateRemoveBitmapButton();
     }
 
     public void onRemoveBitmapClick(View view){
         imageLayerController.removeTopLayer();
+
         updateRefreshButton();
+        updateRemoveBitmapButton();
     }
 
     private void updateRefreshButton(){
