@@ -52,6 +52,7 @@ public class ImageLayerController {
         if(canEditTopLayer()){
             Bitmap bitmap = imageLayers.peek().getDrawingCache();
 
+            // TODO store original bitmap + manipulation result? and just add manipulation result?
             imageLayers.peek().setImageBitmap(BitmapUtility.move(bitmap, x, y));
             imageLayers.peek().invalidate();
 

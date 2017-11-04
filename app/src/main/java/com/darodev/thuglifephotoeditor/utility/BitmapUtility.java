@@ -73,6 +73,8 @@ public class BitmapUtility {
 
     public static Bitmap move(Bitmap bitmap, float x, float y){
         if(x != 0 && y != 0){
+
+            // TODO use original bitmap
             Bitmap clean = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(clean);
             canvas.drawBitmap(bitmap, -30, -30, bitmapPaint);
