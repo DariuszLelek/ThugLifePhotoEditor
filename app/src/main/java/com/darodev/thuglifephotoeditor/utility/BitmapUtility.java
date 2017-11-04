@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,6 +22,7 @@ import java.io.IOException;
  */
 
 public class BitmapUtility {
+    private static final Paint bitmapPaint = new Paint();
 
     @NonNull
     public static BitmapHolder getFromIntentData(Intent intent, Context context) {
@@ -64,6 +67,16 @@ public class BitmapUtility {
             Matrix matrix = new Matrix();
             matrix.postRotate(degrees);
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        }
+        return bitmap;
+    }
+
+    public static Bitmap move(Bitmap bitmap, float x, float y){
+        if(x != 0 && y != 0){
+            Bitmap clean = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+            Canvas canvas = new Canvas(clean);
+            canvas.drawBitmap(bitmap, -30, -30, bitmapPaint);
+            return clean;
         }
         return bitmap;
     }

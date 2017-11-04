@@ -26,6 +26,7 @@ dependencies {
     })
     compile 'com.google.android.gms:play-services-ads:11.4.2'
     compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'joda-time:joda-time:2.9.9'
     compile 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
     testCompile 'junit:junit:4.12'
 }

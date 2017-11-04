@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.provider.MediaStore;
@@ -36,8 +35,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-
-import org.w3c.dom.Text;
 
 public class EditorActivity extends AppCompatActivity {
     private ImageEditor imageEditor;
@@ -111,9 +108,9 @@ public class EditorActivity extends AppCompatActivity {
                     updateEditModeDisplay();
 
                     if(imageEditor.getCurrentEditMode() == ImageEditMode.MOVE){
-                        imageLayerController.processImageMove(motionEvent.getX(), motionEvent.getY());
+                        imageLayerController.processTopLayerMove(motionEvent.getX(), motionEvent.getY());
                     }else if(imageEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
-                        imageLayerController.processImageResizeRotate(motionEvent.getX(), motionEvent.getY());
+                        imageLayerController.processTopLayerResizeRotate(motionEvent.getX(), motionEvent.getY());
                     }
 
                     return true;
