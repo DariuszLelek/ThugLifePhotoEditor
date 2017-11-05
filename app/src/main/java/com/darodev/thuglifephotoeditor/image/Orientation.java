@@ -5,6 +5,7 @@ package com.darodev.thuglifephotoeditor.image;
  * dariusz.lelek@gmail.com
  */
 
+// TODO remove if unused
 public enum Orientation {
     PORTRAIT,
     LANDSCAPE

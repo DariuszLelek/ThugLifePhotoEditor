@@ -18,15 +18,6 @@ public class PointPair {
         this.valid = false;
     }
 
-    public PointPair(float x1, float y1, float x2, float y2) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-
-        this.valid = validate();
-    }
-
     public PointPair(MotionEvent event){
         if(event.getPointerCount() == 2){
             this.x1 = event.getX(0);
@@ -72,10 +63,11 @@ public class PointPair {
 
         PointPair pointPair = (PointPair) o;
 
-        if (Float.compare(pointPair.x1, x1) != 0) return false;
-        if (Float.compare(pointPair.y1, y1) != 0) return false;
-        if (Float.compare(pointPair.x2, x2) != 0) return false;
-        return Float.compare(pointPair.y2, y2) == 0 && valid == pointPair.valid;
+        return Float.compare(pointPair.x1, x1) == 0
+                && Float.compare(pointPair.y1, y1) == 0
+                && Float.compare(pointPair.x2, x2) == 0
+                && Float.compare(pointPair.y2, y2) == 0
+                && valid == pointPair.valid;
     }
 
     @Override

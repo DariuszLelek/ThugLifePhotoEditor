@@ -25,7 +25,7 @@ public class RotationGestureDetector {
         ptrID2 = INVALID_POINTER_ID;
     }
 
-    public boolean onTouchEvent(MotionEvent event){
+    public void onTouchEvent(MotionEvent event){
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 ptrID1 = event.getPointerId(event.getActionIndex());
@@ -63,7 +63,6 @@ public class RotationGestureDetector {
                 ptrID2 = INVALID_POINTER_ID;
                 break;
         }
-        return true;
     }
 
     private float angleBetweenLines (float fX, float fY, float sX, float sY, float nfX, float nfY, float nsX, float nsY)
@@ -77,7 +76,7 @@ public class RotationGestureDetector {
         return angle;
     }
 
-    public static interface OnRotationGestureListener {
-        public void OnRotation(RotationGestureDetector rotationDetector);
+    public interface OnRotationGestureListener {
+        void OnRotation(RotationGestureDetector rotationDetector);
     }
 }

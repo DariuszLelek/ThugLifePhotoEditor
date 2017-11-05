@@ -120,7 +120,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                 }else{
                     if(motionEvent.getPointerCount() == 1){
                         imageLayerEditor.resetScaleStartPointPair();
-                        imageLayerEditor.updatePreviousRotation();
+                        imageLayerEditor.updatePrevScaleRotation();
                         imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
                         updateEditModeDisplay();
                     }
@@ -209,7 +209,6 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         if(imageEditor.isImageEdited()){
             // TODO save ask
 
-
         }
     }
 
@@ -224,23 +223,31 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
     public void onAddBitmapClick(View view){
         imageEditor.setImageIsEdited();
-        imageLayerEditor.addLayer(
-                BitmapUtility.rotate(
-                        BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
-                        imageEditor.isImageRotated() ? 90 : 0));
 
-        updateRefreshButton();
-        updateRemoveBitmapButton();
+        final ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setLayoutParams((findViewById(R.id.view_image_default_layer)).getLayoutParams());
+        imageView.setImageBitmap(BitmapUtility.rotate(
+                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
+                imageEditor.isImageRotated() ? 90 : 0));
+        imageView.setDrawingCacheEnabled(true);
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                imageLayerEditor.addLayer(imageView);
+                updateRotateButton();
+                updateRemoveBitmapButton();
+            }
+        });
     }
 
     public void onRemoveBitmapClick(View view){
         imageLayerEditor.removeTopLayer();
 
-        updateRefreshButton();
+        updateRotateButton();
         updateRemoveBitmapButton();
     }
 
-    private void updateRefreshButton(){
+    private void updateRotateButton(){
         btnRotate.setEnabled(!imageLayerEditor.hasTopLayer());
     }
 

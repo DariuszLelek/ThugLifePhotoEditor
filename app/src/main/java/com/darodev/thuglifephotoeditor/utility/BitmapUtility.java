@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -98,6 +96,7 @@ public class BitmapUtility {
         return bitmap;
     }
 
+    @Deprecated
     public static boolean canFitInMemory(Bitmap bitmap) {
         long size = bitmap.getRowBytes() * bitmap.getHeight();
         long allocNativeHeap = Debug.getNativeHeapAllocatedSize();

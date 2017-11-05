@@ -8,64 +8,59 @@ import android.widget.ImageView;
  * dariusz.lelek@gmail.com
  */
 
-public class ImageLayer {
-    public static final ImageLayer EMPTY = new ImageLayer(null, new ImageCenter(0,0), null);
-
+class ImageLayer {
     private final ImageView imageView;
-    private final Bitmap originalBitmap;
-    private ImageCenter imageCenter;
-    private float rotation, prevRotation = 0F, scale = 1.0F, prevScale = 1.0F;
+    private Bitmap originalBitmap;
+    private float rotation = 0F,
+            prevRotation = 0F,
+            scale = 1.0F,
+            prevScale = 1.0F;
+
     private static final float MAX_SCALE = 10.0f;
     private static final float MIN_SCALE = 0.05f;
 
-    public ImageLayer(ImageView imageView, ImageCenter center, Bitmap originalBitmap) {
+    ImageLayer(final ImageView imageView) {
         this.imageView = imageView;
-        this.imageCenter = center;
-        this.originalBitmap = originalBitmap;
+
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                originalBitmap = imageView.getDrawingCache();
+            }
+        });
     }
 
-    public ImageView getImageView() {
-        return imageView;
-    }
-
-    public Bitmap getOriginalBitmap() {
+    Bitmap getOriginalBitmap() {
         return originalBitmap;
     }
 
-    public ImageCenter getImageCenter() {
-        return imageCenter;
-    }
 
-    public void setImageCenter(ImageCenter imageCenter) {
-        this.imageCenter = imageCenter;
-    }
-
-    public float getScale() {
+    float getScale() {
         return Math.max(Math.min(scale * prevScale, MAX_SCALE), MIN_SCALE);
     }
 
-    public void updatePreviousScale(){
+    void updatePreviousScale(){
         prevScale = getScale();
         scale = 1.0F;
     }
 
-    public void setScale(float scale) {
+    void setScale(float scale) {
         this.scale = scale;
     }
 
-    public void setBitmapToView(Bitmap bitmap){
+    void setBitmapToView(Bitmap bitmap){
         this.imageView.setImageBitmap(bitmap);
     }
 
-    public float getRotation() {
+    float getRotation() {
         return rotation;
     }
 
-    public void updatePreviousRotation(){
+    void updatePreviousRotation(){
         this.prevRotation = this.rotation;
     }
 
-    public void setRotation(float rotation) {
+    void setRotation(float rotation) {
         this.rotation = this.prevRotation + rotation;
     }
 }

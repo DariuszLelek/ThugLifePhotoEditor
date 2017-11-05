@@ -25,15 +25,11 @@ public class BitmapHolder {
     }
 
     @NonNull
-    public Bitmap getBitmap() {
+    Bitmap getBitmap() {
         return bitmap;
     }
 
-    public int getRotationDegrees() {
+    int getRotationDegrees() {
         return rotationDegrees;
-    }
-
-    public boolean hasBitmap(){
-        return bitmap != null;
     }
 }
