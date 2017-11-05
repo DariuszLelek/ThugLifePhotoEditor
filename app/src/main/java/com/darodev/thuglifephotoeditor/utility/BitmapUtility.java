@@ -72,15 +72,10 @@ public class BitmapUtility {
     }
 
     public static Bitmap move(Bitmap bitmap, float x, float y){
-        if(x != 0 && y != 0){
-
-            // TODO use original bitmap
-            Bitmap clean = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-            Canvas canvas = new Canvas(clean);
-            canvas.drawBitmap(bitmap, -30, -30, bitmapPaint);
-            return clean;
-        }
-        return bitmap;
+        Bitmap clean = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(clean);
+        canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2, y - bitmap.getHeight()/2, bitmapPaint);
+        return clean;
     }
 
     public static boolean canFitInMemory(Bitmap bitmap) {

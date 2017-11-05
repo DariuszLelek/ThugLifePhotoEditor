@@ -31,6 +31,7 @@ import com.darodev.thuglifephotoeditor.image.ImageEditor;
 import com.darodev.thuglifephotoeditor.image.layer.ImageLayerController;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
+import com.darodev.thuglifephotoeditor.utility.TouchMoveHelper;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -107,7 +108,7 @@ public class EditorActivity extends AppCompatActivity {
                     imageEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
                     updateEditModeDisplay();
 
-                    if(imageEditor.getCurrentEditMode() == ImageEditMode.MOVE){
+                    if(imageEditor.getCurrentEditMode() == ImageEditMode.MOVE && TouchMoveHelper.isMove()){
                         imageLayerController.processTopLayerMove(motionEvent.getX(), motionEvent.getY());
                     }else if(imageEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
                         imageLayerController.processTopLayerResizeRotate(motionEvent.getX(), motionEvent.getY());
@@ -118,7 +119,9 @@ public class EditorActivity extends AppCompatActivity {
 
                 if(motionEvent.getPointerCount() == 1){
                     imageEditor.setCurrentEditMode(ImageEditMode.NONE);
+                    imageLayerController.processEditFinished();
                     updateEditModeDisplay();
+                    TouchMoveHelper.reset();
                 }
 
                 return false;
