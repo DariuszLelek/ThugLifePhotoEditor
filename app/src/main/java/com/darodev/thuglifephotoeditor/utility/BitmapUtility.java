@@ -14,7 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
-import com.darodev.thuglifephotoeditor.image.layer.ImageLocation;
+import com.darodev.thuglifephotoeditor.image.layer.ImageCenter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,15 +25,7 @@ import java.io.IOException;
  */
 
 public class BitmapUtility {
-    private static final Paint bitmapPaint = new Paint();
-    private final static Paint p = getPaint();
-
-    private static Paint getPaint(){
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(3);
-        return paint;
-    }
+    private static final Paint bitmapPaint = new Paint( Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG );
 
     @NonNull
     public static BitmapHolder getFromIntentData(Intent intent, Context context) {
@@ -73,30 +65,25 @@ public class BitmapUtility {
         return Math.max(bitmap.getHeight(), bitmap.getWidth());
     }
 
-    public static Bitmap rotateBitmap(Bitmap bitmap, float rotationAngleDegree, ImageLocation imageLocation){
-
+    public static Bitmap manipulate(Bitmap bitmap, float rotationAngleDegree, float scale, ImageCenter imageCenter){
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
 
-        int newW=w, newH=h;
-        if (rotationAngleDegree==90 || rotationAngleDegree==270){
+        int newW = w, newH = h;
+        if (rotationAngleDegree == 90 || rotationAngleDegree == 270) {
             newW = h;
             newH = w;
         }
-        Bitmap rotatedBitmap = Bitmap.createBitmap(newW,newH, bitmap.getConfig());
+
+        Bitmap rotatedBitmap = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
         Canvas canvas = new Canvas(rotatedBitmap);
 
-        Rect rect = new Rect(0,0,newW, newH);
         Matrix matrix = new Matrix();
-        float px = rect.exactCenterX();
-        float py = rect.exactCenterY();
-        matrix.postTranslate(-bitmap.getWidth()/2, -bitmap.getHeight()/2);
+        matrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
+        matrix.postScale(scale,scale);
         matrix.postRotate(rotationAngleDegree);
-        matrix.postTranslate(px, py);
-        canvas.drawBitmap(bitmap, matrix, new Paint( Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG ));
-
-        canvas.drawCircle(imageLocation.getX(), imageLocation.getY(), 5,  p);
-
+        matrix.postTranslate(imageCenter.getX(), imageCenter.getY());
+        canvas.drawBitmap(bitmap, matrix, bitmapPaint);
         matrix.reset();
 
         return rotatedBitmap;
@@ -109,15 +96,6 @@ public class BitmapUtility {
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
         return bitmap;
-    }
-
-    public static Bitmap move(Bitmap bitmap, float x, float y, ImageLocation location){
-        Bitmap clean = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-        Canvas canvas = new Canvas(clean);
-        float left = x - location.getX();
-        float top = y - location.getY();
-        canvas.drawBitmap(bitmap, x - location.getX(), y - location.getY(), bitmapPaint);
-        return clean;
     }
 
     public static boolean canFitInMemory(Bitmap bitmap) {

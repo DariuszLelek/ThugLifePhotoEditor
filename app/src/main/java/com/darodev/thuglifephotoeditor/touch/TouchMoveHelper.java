@@ -22,6 +22,8 @@ public class TouchMoveHelper {
         return getLastTouchTime().plusMillis(TOUCH_THRESHOLD_MS).isBeforeNow();
     }
 
+
+
     private static DateTime getLastTouchTime(){
         if(lastTouchTime == null){
             lastTouchTime = DateTime.now();

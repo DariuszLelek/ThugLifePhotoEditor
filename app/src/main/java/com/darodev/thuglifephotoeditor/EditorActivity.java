@@ -15,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -29,12 +28,12 @@ import android.widget.Toast;
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 import com.darodev.thuglifephotoeditor.image.ImageEditMode;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
+import com.darodev.thuglifephotoeditor.image.layer.ImageCenter;
 import com.darodev.thuglifephotoeditor.image.layer.ImageLayerEditor;
 import com.darodev.thuglifephotoeditor.touch.RotationGestureDetector;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
-import com.darodev.thuglifephotoeditor.touch.TouchMoveHelper;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -111,39 +110,35 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 rotationDetector.onTouchEvent(motionEvent);
+                updateEditModeDisplay();
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                     imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
-                    //updateEditModeDisplay();
-
-                    if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE && TouchMoveHelper.isMove()){
-                        imageLayerEditor.processTopLayerMove(motionEvent.getX(), motionEvent.getY());
-                    }else if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
-                        if(motionEvent.getPointerCount() == 2){
-                            PointPair pointerPair = new PointPair(
-                                    motionEvent.getX(0),
-                                    motionEvent.getY(0),
-                                    motionEvent.getX(1),
-                                    motionEvent.getY(1)
-                            );
-                            rotationDetector.onTouchEvent(motionEvent);
-                            imageLayerEditor.processTopLayerResizeRotate(pointerPair);
-                        }
-                    }
-
+                    updateEditModeDisplay();
+                    processMotionEvent(motionEvent);
                     return true;
                 }else{
                     if(motionEvent.getPointerCount() == 1){
-                        imageLayerEditor.setCurrentEditMode(ImageEditMode.NONE);
-                        imageLayerEditor.processEditFinished();
-                        //updateEditModeDisplay();
-                        TouchMoveHelper.reset();
+                        imageLayerEditor.resetScaleStartPointPair();
+                        imageLayerEditor.updatePreviousRotation();
+                        imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
+                        updateEditModeDisplay();
                     }
                 }
 
                 return false;
             }
         });
+    }
+
+    private void processMotionEvent(MotionEvent motionEvent){
+        if(imageLayerEditor.isNotBetweenEditModeSwitch()){
+            if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE){
+                imageLayerEditor.processTopLayerMove(new ImageCenter(motionEvent.getX(), motionEvent.getY()));
+            }else if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
+                imageLayerEditor.processTopLayerResizeRotate(new PointPair(motionEvent));
+            }
+        }
     }
 
     private void updateEditModeDisplay(){
@@ -285,7 +280,6 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     public void OnRotation(RotationGestureDetector rotationDetector) {
         if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
             imageLayerEditor.setCurrentRotation(rotationDetector.getAngle());
-            textEditMode.setText(rotationDetector.getAngle() + "");
         }
     }
 }

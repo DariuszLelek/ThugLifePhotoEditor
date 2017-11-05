@@ -1,5 +1,7 @@
 package com.darodev.thuglifephotoeditor.touch;
 
+import android.view.MotionEvent;
+
 /**
  * Created by Dariusz Lelek on 11/5/2017.
  * dariusz.lelek@gmail.com
@@ -25,20 +27,20 @@ public class PointPair {
         this.valid = validate();
     }
 
-    public float getX1() {
-        return x1;
-    }
+    public PointPair(MotionEvent event){
+        if(event.getPointerCount() == 2){
+            this.x1 = event.getX(0);
+            this.y1 = event.getY(0);
+            this.x2 = event.getX(1);
+            this.y2 = event.getY(1);
+        }else{
+            this.x1 = 0;
+            this.y1 = 0;
+            this.x2 = 0;
+            this.y2 = 0;
+        }
 
-    public float getY1() {
-        return y1;
-    }
-
-    public float getX2() {
-        return x2;
-    }
-
-    public float getY2() {
-        return y2;
+        this.valid = validate();
     }
 
     public float getCenterX(){
@@ -49,17 +51,10 @@ public class PointPair {
         return Math.min(y1, y2) + Math.abs((y1 - y2) / 2);
     }
 
-    public PointerPairCompareResult getCompareResult(PointPair o){
+    public float getScaleResult(PointPair o){
         double firstLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
         double secondLength = Math.sqrt(Math.pow(o.x1 - o.x2, 2) + Math.pow(o.y1 - o.y2, 2));
-
-        double resizeLength = Math.abs(firstLength - secondLength);
-
-        firstLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-        secondLength = Math.sqrt(Math.pow(o.x1 - o.x2, 2) + Math.pow(o.y1 - o.y2, 2));
-
-
-        return PointerPairCompareResult.UNKNOWN;
+        return (float) (secondLength/firstLength);
     }
 
     private boolean validate(){
@@ -68,5 +63,28 @@ public class PointPair {
 
     public boolean isValid(){
         return valid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PointPair pointPair = (PointPair) o;
+
+        if (Float.compare(pointPair.x1, x1) != 0) return false;
+        if (Float.compare(pointPair.y1, y1) != 0) return false;
+        if (Float.compare(pointPair.x2, x2) != 0) return false;
+        return Float.compare(pointPair.y2, y2) == 0 && valid == pointPair.valid;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (x1 != +0.0f ? Float.floatToIntBits(x1) : 0);
+        result = 31 * result + (y1 != +0.0f ? Float.floatToIntBits(y1) : 0);
+        result = 31 * result + (x2 != +0.0f ? Float.floatToIntBits(x2) : 0);
+        result = 31 * result + (y2 != +0.0f ? Float.floatToIntBits(y2) : 0);
+        result = 31 * result + (valid ? 1 : 0);
+        return result;
     }
 }

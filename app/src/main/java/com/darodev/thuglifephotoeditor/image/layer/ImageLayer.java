@@ -9,23 +9,63 @@ import android.widget.ImageView;
  */
 
 public class ImageLayer {
-    private final ImageView imageView;
-    private ImageLocation imageLocation;
+    public static final ImageLayer EMPTY = new ImageLayer(null, new ImageCenter(0,0), null);
 
-    public ImageLayer(ImageView imageView, ImageLocation imageLocation) {
+    private final ImageView imageView;
+    private final Bitmap originalBitmap;
+    private ImageCenter imageCenter;
+    private float rotation, prevRotation = 0F, scale = 1.0F, prevScale = 1.0F;
+    private static final float MAX_SCALE = 10.0f;
+    private static final float MIN_SCALE = 0.05f;
+
+    public ImageLayer(ImageView imageView, ImageCenter center, Bitmap originalBitmap) {
         this.imageView = imageView;
-        this.imageLocation = imageLocation;
+        this.imageCenter = center;
+        this.originalBitmap = originalBitmap;
     }
 
     public ImageView getImageView() {
         return imageView;
     }
 
-    public ImageLocation getImageLocation() {
-        return imageLocation;
+    public Bitmap getOriginalBitmap() {
+        return originalBitmap;
     }
 
-    public void setImageLocation(ImageLocation imageLocation) {
-        this.imageLocation = imageLocation;
+    public ImageCenter getImageCenter() {
+        return imageCenter;
+    }
+
+    public void setImageCenter(ImageCenter imageCenter) {
+        this.imageCenter = imageCenter;
+    }
+
+    public float getScale() {
+        return Math.max(Math.min(scale * prevScale, MAX_SCALE), MIN_SCALE);
+    }
+
+    public void updatePreviousScale(){
+        prevScale = getScale();
+        scale = 1.0F;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public void setBitmapToView(Bitmap bitmap){
+        this.imageView.setImageBitmap(bitmap);
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void updatePreviousRotation(){
+        this.prevRotation = this.rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = this.prevRotation + rotation;
     }
 }

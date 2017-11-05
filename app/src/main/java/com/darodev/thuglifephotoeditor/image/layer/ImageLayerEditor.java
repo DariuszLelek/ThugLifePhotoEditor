@@ -6,9 +6,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.darodev.thuglifephotoeditor.image.ImageEditMode;
-import com.darodev.thuglifephotoeditor.touch.PointerPairCompareResult;
-import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
+import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 
 import org.joda.time.DateTime;
 
@@ -23,39 +22,38 @@ public class ImageLayerEditor {
     private final Context context;
     private final ImageView defaultLayer;
     private final FrameLayout imageLayerLayout;
+    private final ImageLayer emptyLayer;
     private final Stack<ImageLayer> imageLayers = new Stack<>();
     private int freeIndex;
-    private DateTime lastEditTime;
-    private Bitmap currentBitmap;
-    private float lastX, lastY;
-    private PointPair lastPointPair;
+    private DateTime lastEditTime, lestEditModeSwitchTime;
+    private PointPair scaleStartPointPair = PointPair.INVALID_PAIR;
     private ImageEditMode currentEditMode;
-    private float currentRotation;
 
-    private static final int EDIT_TIME_DELAY_MS = 50;
+    private static final int EDIT_TIME_DELAY_MS = 40;
+    private static final int EDIT_MODE_TIME_DELAY_MS = 75;
+
 
     public ImageLayerEditor(Context context, ImageView defaultLayer, FrameLayout imageLayerLayout) {
         this.context = context;
         this.defaultLayer = defaultLayer;
         this.imageLayerLayout = imageLayerLayout;
+        this.emptyLayer = getEmptyImageLayer();
 
         reset();
     }
 
-    public void reset(){
-        resetLastCoordinates();
-        resetPointerPair();
+    private ImageLayer getEmptyImageLayer(){
+        return new ImageLayer(
+                new ImageView(context),
+                new ImageCenter(0,0),
+                Bitmap.createBitmap(1,1, Bitmap.Config.ARGB_4444));
+    }
 
+    public void reset(){
         imageLayers.clear();
         freeIndex = getFirstFreeIndex(imageLayerLayout);
         lastEditTime = DateTime.now();
-        currentBitmap = null;
         currentEditMode = ImageEditMode.NONE;
-    }
-
-    private void resetLastCoordinates(){
-        lastX = -1F;
-        lastY = -1F;
     }
 
     private int getFirstFreeIndex(final FrameLayout imageLayerLayout){
@@ -70,101 +68,87 @@ public class ImageLayerEditor {
         return currentEditMode;
     }
 
-    public void setCurrentEditMode(ImageEditMode currentEditMode) {
-        this.currentEditMode = currentEditMode;
-    }
-
-    public void setCurrentEditModeByTouchCount(int touchCount) {
-        if(touchCount == 1 && currentEditMode.isLowerThan(ImageEditMode.MOVE)){
-            this.currentEditMode = ImageEditMode.MOVE;
-        }else if (touchCount == 2){
-            this.currentEditMode = ImageEditMode.ROTATE_RESIZE;
+    public void changeCurrentEditMode(ImageEditMode editMode) {
+        if (this.currentEditMode != editMode) {
+            this.currentEditMode = editMode;
+            lestEditModeSwitchTime = DateTime.now();
         }
     }
 
-    public float getCurrentRotation() {
-        return currentRotation;
+    public void updatePreviousRotation() {
+        peekTopLayer().updatePreviousScale();
+        peekTopLayer().updatePreviousRotation();
+    }
+
+    public void setCurrentEditModeByTouchCount(int touchCount) {
+        if(touchCount == 1){
+            changeCurrentEditMode(ImageEditMode.MOVE);
+        }else if (touchCount == 2){
+            changeCurrentEditMode(ImageEditMode.ROTATE_RESIZE);
+        }
     }
 
     public void setCurrentRotation(float currentRotation) {
-        this.currentRotation = currentRotation;
+        peekTopLayer().setRotation(currentRotation);
+    }
+
+    public void resetScaleStartPointPair(){
+        scaleStartPointPair = PointPair.INVALID_PAIR;
     }
 
     public boolean hasTopLayer(){
         return !imageLayers.isEmpty();
     }
 
-    public void processTopLayerMove(float x, float y){
-        if(canEditTopLayer() && lastCoordinatesValid()){
-            Bitmap bitmap = getCurrentTopLayerBitmap();
-            peekTopLayerView().setImageBitmap(BitmapUtility.move(bitmap, x , y, imageLayers.peek().getImageLocation()));
-            imageLayers.peek().setImageLocation(new ImageLocation(x, y));
-            updateEditTime();
-            resetLastCoordinates();
+    public void processTopLayerMove(ImageCenter imageCenter){
+        processManipulation(imageCenter);
+    }
+
+    public void setScaleStartPointPair(PointPair pointPair){
+        if(!scaleStartPointPair.isValid()){
+            scaleStartPointPair = pointPair;
         }
-        updateLastCoordinates(x, y);
+    }
+
+    public void processTopLayerResizeRotate(PointPair pointPair){
+        peekTopLayer().setScale(getScale(pointPair));
+        processManipulation(new ImageCenter(pointPair.getCenterX(), pointPair.getCenterY()));
+        setScaleStartPointPair(pointPair);
+    }
+
+    public boolean isNotBetweenEditModeSwitch() {
+        return lestEditModeSwitchTime.plusMillis(EDIT_MODE_TIME_DELAY_MS).isBeforeNow();
     }
 
     private boolean canEditTopLayer(){
-        return !imageLayers.isEmpty() && lastEditTime.withMillis(EDIT_TIME_DELAY_MS).isBefore(DateTime.now());
+        return hasTopLayer() && lastEditTime.plusMillis(EDIT_TIME_DELAY_MS).isBeforeNow() && currentEditMode != ImageEditMode.NONE;
     }
 
-    private boolean lastCoordinatesValid(){
-        return lastX > 0 && lastY > 0;
+    private float getScale(PointPair pointPair){
+        return canGetScale(pointPair) ? scaleStartPointPair.getScaleResult(pointPair) : 1.0F;
     }
 
-    private ImageView peekTopLayerView() {
-        return imageLayers.peek().getImageView();
+    private boolean canGetScale(PointPair pointPair){
+        return scaleStartPointPair.isValid() && pointPair.isValid() && !scaleStartPointPair.equals(pointPair);
     }
 
-    private Bitmap getCurrentTopLayerBitmap(){
-        if(currentBitmap == null && hasTopLayer()){
-            //peekTopLayerView().invalidate();
-            currentBitmap = peekTopLayerView().getDrawingCache();
-        }
-
-        return currentBitmap;
+    private ImageLayer peekTopLayer() {
+        return hasTopLayer() ? imageLayers.peek() : emptyLayer;
     }
 
     private void updateEditTime(){
         lastEditTime = DateTime.now();
     }
 
-    public void processEditFinished(){
-        currentBitmap = null;
-        resetLastCoordinates();
-        resetPointerPair();
-    }
-
-    private void updateLastCoordinates(float x, float y){
-        lastX = x;
-        lastY = y;
-    }
-
-    private void resetPointerPair(){
-        lastPointPair = PointPair.INVALID_PAIR;
-    }
-
-    public void processTopLayerResizeRotate(PointPair pointPair){
-        if(canEditTopLayer() && lastPointPair.isValid()){
-            peekTopLayerView().setImageBitmap(
-                    BitmapUtility.rotateBitmap(
-                            getCurrentTopLayerBitmap(),
-                            -currentRotation,
-                            imageLayers.peek().getImageLocation()));
+    private void processManipulation(ImageCenter imageCenter) {
+        if (canEditTopLayer()) {
+            peekTopLayer().setBitmapToView(getManipulatedBitmap(peekTopLayer(), imageCenter));
             updateEditTime();
-            resetPointerPair();
         }
-        updatePointerPair(pointPair);
     }
 
-    private boolean isRotation(PointPair pointPair){
-
-        return false;
-    }
-
-    private void updatePointerPair(PointPair pointPair){
-        lastPointPair = pointPair;
+    private Bitmap getManipulatedBitmap(ImageLayer topLayer, ImageCenter imageCenter) {
+        return BitmapUtility.manipulate(topLayer.getOriginalBitmap(), -topLayer.getRotation(), topLayer.getScale(), imageCenter);
     }
 
     /**
@@ -181,8 +165,8 @@ public class ImageLayerEditor {
             @Override
             public void run() {
                 Bitmap bitmap = view.getDrawingCache();
-                ImageLocation location = new ImageLocation(bitmap.getWidth() / 2,bitmap.getHeight() / 2);
-                imageLayers.push(new ImageLayer(view, location));
+                ImageCenter location = new ImageCenter(bitmap.getWidth() / 2,bitmap.getHeight() / 2);
+                imageLayers.push(new ImageLayer(view, location, bitmap));
             }
         });
     }

@@ -5,10 +5,10 @@ package com.darodev.thuglifephotoeditor.image.layer;
  * dariusz.lelek@gmail.com
  */
 
-public class ImageLocation {
+public class ImageCenter {
     private final float x, y;
 
-    public ImageLocation(float x, float y) {
+    public ImageCenter(float x, float y) {
         this.x = x;
         this.y = y;
     }

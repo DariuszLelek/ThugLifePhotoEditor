@@ -6,15 +6,5 @@ package com.darodev.thuglifephotoeditor.image;
  */
 
 public enum ImageEditMode {
-    NONE(0), MOVE(1), ROTATE_RESIZE(2);
-
-    private int modeLevel;
-
-    ImageEditMode(int modeLevel) {
-        this.modeLevel = modeLevel;
-    }
-
-    public boolean isLowerThan(ImageEditMode mode){
-        return this.modeLevel < mode.modeLevel;
-    }
+    NONE, MOVE, ROTATE_RESIZE
 }
