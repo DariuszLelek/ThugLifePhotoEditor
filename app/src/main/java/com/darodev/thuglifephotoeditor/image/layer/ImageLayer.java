@@ -10,18 +10,22 @@ import android.widget.ImageView;
 
 public class ImageLayer {
     private final ImageView imageView;
-    private final Bitmap originalBitmap;
+    private ImageLocation imageLocation;
 
-    public ImageLayer(ImageView imageView, Bitmap originalBitmap) {
+    public ImageLayer(ImageView imageView, ImageLocation imageLocation) {
         this.imageView = imageView;
-        this.originalBitmap = originalBitmap;
+        this.imageLocation = imageLocation;
     }
 
     public ImageView getImageView() {
         return imageView;
     }
 
-    public Bitmap getOriginalBitmap() {
-        return originalBitmap;
+    public ImageLocation getImageLocation() {
+        return imageLocation;
+    }
+
+    public void setImageLocation(ImageLocation imageLocation) {
+        this.imageLocation = imageLocation;
     }
 }

@@ -6,7 +6,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.darodev.thuglifephotoeditor.image.ImageEditMode;
+import com.darodev.thuglifephotoeditor.touch.PointerPairCompareResult;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
+import com.darodev.thuglifephotoeditor.touch.PointPair;
 
 import org.joda.time.DateTime;
 
@@ -24,8 +26,11 @@ public class ImageLayerEditor {
     private final Stack<ImageLayer> imageLayers = new Stack<>();
     private int freeIndex;
     private DateTime lastEditTime;
+    private Bitmap currentBitmap;
     private float lastX, lastY;
+    private PointPair lastPointPair;
     private ImageEditMode currentEditMode;
+    private float currentRotation;
 
     private static final int EDIT_TIME_DELAY_MS = 50;
 
@@ -39,7 +44,7 @@ public class ImageLayerEditor {
 
     public void reset(){
         resetLastCoordinates();
-        removeAllLayers();
+        resetPointerPair();
 
         imageLayers.clear();
         freeIndex = getFirstFreeIndex(imageLayerLayout);
@@ -61,17 +66,6 @@ public class ImageLayerEditor {
         return index;
     }
 
-    // TODO this method is redundant because after image is added new ImageLayerEditor is created.
-    @Deprecated
-    private void removeAllLayers(){
-        while (freeIndex > 0){
-            if(imageLayerLayout.getChildAt(freeIndex) != null){
-                imageLayerLayout.removeViewAt(freeIndex);
-            }
-            freeIndex--;
-        }
-    }
-
     public ImageEditMode getCurrentEditMode() {
         return currentEditMode;
     }
@@ -88,13 +82,23 @@ public class ImageLayerEditor {
         }
     }
 
+    public float getCurrentRotation() {
+        return currentRotation;
+    }
+
+    public void setCurrentRotation(float currentRotation) {
+        this.currentRotation = currentRotation;
+    }
+
     public boolean hasTopLayer(){
         return !imageLayers.isEmpty();
     }
 
     public void processTopLayerMove(float x, float y){
         if(canEditTopLayer() && lastCoordinatesValid()){
-            peekTopLayerView().setImageBitmap(BitmapUtility.move(getCurrentTopLayerBitmap(), x , y));
+            Bitmap bitmap = getCurrentTopLayerBitmap();
+            peekTopLayerView().setImageBitmap(BitmapUtility.move(bitmap, x , y, imageLayers.peek().getImageLocation()));
+            imageLayers.peek().setImageLocation(new ImageLocation(x, y));
             updateEditTime();
             resetLastCoordinates();
         }
@@ -109,14 +113,13 @@ public class ImageLayerEditor {
         return lastX > 0 && lastY > 0;
     }
 
-    private ImageView peekTopLayerView(){
-        synchronized (imageLayers){
-            return imageLayers.peek().getImageView();
-        }
+    private ImageView peekTopLayerView() {
+        return imageLayers.peek().getImageView();
     }
 
     private Bitmap getCurrentTopLayerBitmap(){
         if(currentBitmap == null && hasTopLayer()){
+            //peekTopLayerView().invalidate();
             currentBitmap = peekTopLayerView().getDrawingCache();
         }
 
@@ -130,6 +133,7 @@ public class ImageLayerEditor {
     public void processEditFinished(){
         currentBitmap = null;
         resetLastCoordinates();
+        resetPointerPair();
     }
 
     private void updateLastCoordinates(float x, float y){
@@ -137,12 +141,30 @@ public class ImageLayerEditor {
         lastY = y;
     }
 
-    public void processTopLayerResizeRotate(float x, float y){
-        if(canEditTopLayer()){
-            // TODO
+    private void resetPointerPair(){
+        lastPointPair = PointPair.INVALID_PAIR;
+    }
 
+    public void processTopLayerResizeRotate(PointPair pointPair){
+        if(canEditTopLayer() && lastPointPair.isValid()){
+            peekTopLayerView().setImageBitmap(
+                    BitmapUtility.rotateBitmap(
+                            getCurrentTopLayerBitmap(),
+                            -currentRotation,
+                            imageLayers.peek().getImageLocation()));
             updateEditTime();
+            resetPointerPair();
         }
+        updatePointerPair(pointPair);
+    }
+
+    private boolean isRotation(PointPair pointPair){
+
+        return false;
+    }
+
+    private void updatePointerPair(PointPair pointPair){
+        lastPointPair = pointPair;
     }
 
     /**
@@ -153,9 +175,16 @@ public class ImageLayerEditor {
         view.setLayoutParams(defaultLayer.getLayoutParams());
         view.setImageBitmap(bitmap);
         view.setDrawingCacheEnabled(true);
-
-        imageLayers.push(new ImageLayer(view));
         imageLayerLayout.addView(view, freeIndex++);
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = view.getDrawingCache();
+                ImageLocation location = new ImageLocation(bitmap.getWidth() / 2,bitmap.getHeight() / 2);
+                imageLayers.push(new ImageLayer(view, location));
+            }
+        });
     }
 
 

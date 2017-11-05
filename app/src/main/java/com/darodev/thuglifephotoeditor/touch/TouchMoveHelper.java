@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.utility;
+package com.darodev.thuglifephotoeditor.touch;
 
 import org.joda.time.DateTime;
 
