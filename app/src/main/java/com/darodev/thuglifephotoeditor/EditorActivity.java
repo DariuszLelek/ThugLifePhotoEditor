@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 import com.darodev.thuglifephotoeditor.image.ImageEditMode;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
-import com.darodev.thuglifephotoeditor.image.layer.ImageLayerController;
+import com.darodev.thuglifephotoeditor.image.layer.ImageLayerEditor;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.utility.TouchMoveHelper;
@@ -39,7 +39,7 @@ import com.google.android.gms.ads.MobileAds;
 
 public class EditorActivity extends AppCompatActivity {
     private ImageEditor imageEditor;
-    private ImageLayerController imageLayerController;
+    private ImageLayerEditor imageLayerEditor;
 
     private AdView adView;
     private ConfigUtility configUtility;
@@ -60,7 +60,7 @@ public class EditorActivity extends AppCompatActivity {
 
         resources = getResources();
         configUtility = createConfigUtility();
-        imageLayerController = createImageLayerController();
+        imageLayerEditor = createImageLayerController();
         imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
 
         btnRotate = findViewById(R.id.btn_rotate);
@@ -88,15 +88,15 @@ public class EditorActivity extends AppCompatActivity {
                 getSharedPreferences(resources.getString(R.string.app_name), Context.MODE_PRIVATE));
     }
 
-    private ImageLayerController createImageLayerController(){
-        return new ImageLayerController(
+    private ImageLayerEditor createImageLayerController(){
+        return new ImageLayerEditor(
                 this.getApplicationContext(),
                 (ImageView) findViewById(R.id.view_image_default_layer),
                 (FrameLayout) findViewById(R.id.layout_image_layer));
     }
 
     private void updateRemoveBitmapButton(){
-        btnRemoveBitmap.setEnabled(imageLayerController.hasTopLayer());
+        btnRemoveBitmap.setEnabled(imageLayerEditor.hasTopLayer());
     }
 
     private void prepareLayerListener() {
@@ -105,23 +105,23 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                    imageEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
+                    imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
                     updateEditModeDisplay();
 
-                    if(imageEditor.getCurrentEditMode() == ImageEditMode.MOVE && TouchMoveHelper.isMove()){
-                        imageLayerController.processTopLayerMove(motionEvent.getX(), motionEvent.getY());
-                    }else if(imageEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
-                        imageLayerController.processTopLayerResizeRotate(motionEvent.getX(), motionEvent.getY());
+                    if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE && TouchMoveHelper.isMove()){
+                        imageLayerEditor.processTopLayerMove(motionEvent.getX(), motionEvent.getY());
+                    }else if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
+                        imageLayerEditor.processTopLayerResizeRotate(motionEvent.getX(), motionEvent.getY());
                     }
 
                     return true;
-                }
-
-                if(motionEvent.getPointerCount() == 1){
-                    imageEditor.setCurrentEditMode(ImageEditMode.NONE);
-                    imageLayerController.processEditFinished();
-                    updateEditModeDisplay();
-                    TouchMoveHelper.reset();
+                }else{
+                    if(motionEvent.getPointerCount() == 1){
+                        imageLayerEditor.setCurrentEditMode(ImageEditMode.NONE);
+                        imageLayerEditor.processEditFinished();
+                        updateEditModeDisplay();
+                        TouchMoveHelper.reset();
+                    }
                 }
 
                 return false;
@@ -130,7 +130,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void updateEditModeDisplay(){
-        textEditMode.setText(imageEditor.getCurrentEditMode().toString());
+        textEditMode.setText(imageLayerEditor.getCurrentEditMode().toString());
     }
 
     private void saveEditImageDimensions(){
@@ -139,6 +139,7 @@ public class EditorActivity extends AppCompatActivity {
 
     public void btnTakePicture(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            askToSave();
             dispatchTakePictureIntent();
         } else {
             requestCameraPermission();
@@ -146,6 +147,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void onSelectPictureClick(View view) {
+        askToSave();
         dispatchSelectPictureIntent();
     }
 
@@ -188,6 +190,15 @@ public class EditorActivity extends AppCompatActivity {
         imageEditor.recycleBitmap();
         imageEditor = new ImageEditor(bitmapHolder, configUtility);
         refreshImageBitmap();
+        imageLayerEditor.reset();
+    }
+
+    private void askToSave(){
+        if(imageEditor.isImageEdited()){
+            // TODO save ask
+
+
+        }
     }
 
     private void refreshImageBitmap(){
@@ -200,7 +211,8 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void onAddBitmapClick(View view){
-        imageLayerController.addLayer(
+        imageEditor.setImageIsEdited();
+        imageLayerEditor.addLayer(
                 BitmapUtility.rotate(
                         BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
                         imageEditor.isImageRotated() ? 90 : 0));
@@ -210,14 +222,14 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void onRemoveBitmapClick(View view){
-        imageLayerController.removeTopLayer();
+        imageLayerEditor.removeTopLayer();
 
         updateRefreshButton();
         updateRemoveBitmapButton();
     }
 
     private void updateRefreshButton(){
-        btnRotate.setEnabled(!imageLayerController.hasTopLayer());
+        btnRotate.setEnabled(!imageLayerEditor.hasTopLayer());
     }
 
     private void prepareAds() {

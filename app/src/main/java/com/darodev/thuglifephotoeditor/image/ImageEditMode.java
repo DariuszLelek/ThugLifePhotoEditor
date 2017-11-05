@@ -17,13 +17,4 @@ public enum ImageEditMode {
     public boolean isLowerThan(ImageEditMode mode){
         return this.modeLevel < mode.modeLevel;
     }
-
-    public static ImageEditMode getHigherPriorityMode(ImageEditMode currentMode){
-        if(currentMode == NONE){
-            return MOVE;
-        }else if(currentMode == MOVE){
-            return ROTATE_RESIZE;
-        }
-        return NONE;
-    }
 }

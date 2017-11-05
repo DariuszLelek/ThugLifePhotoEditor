@@ -2,41 +2,55 @@ package com.darodev.thuglifephotoeditor.image.layer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.darodev.thuglifephotoeditor.image.ImageEditMode;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.Stack;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Dariusz Lelek on 11/4/2017.
  * dariusz.lelek@gmail.com
  */
 
-public class ImageLayerController {
+public class ImageLayerEditor {
     private final Context context;
     private final ImageView defaultLayer;
     private final FrameLayout imageLayerLayout;
-    private final Stack<ImageView> imageLayers = new Stack<>();
-    private int freeIndex = 0;
-    private DateTime lastEditTime = DateTime.now();
-    private Bitmap currentBitmap;
-    private float lastX = -1F, lastY = -1F;
+    private final Stack<ImageLayer> imageLayers = new Stack<>();
+    private int freeIndex;
+    private DateTime lastEditTime;
+    private float lastX, lastY;
+    private ImageEditMode currentEditMode;
 
     private static final int EDIT_TIME_DELAY_MS = 50;
 
-    public ImageLayerController(Context context, ImageView defaultLayer, FrameLayout imageLayerLayout) {
+    public ImageLayerEditor(Context context, ImageView defaultLayer, FrameLayout imageLayerLayout) {
         this.context = context;
         this.defaultLayer = defaultLayer;
         this.imageLayerLayout = imageLayerLayout;
-        this.freeIndex = getFirstFreeIndex(imageLayerLayout);
+
+        reset();
+    }
+
+    public void reset(){
+        resetLastCoordinates();
+        removeAllLayers();
+
+        imageLayers.clear();
+        freeIndex = getFirstFreeIndex(imageLayerLayout);
+        lastEditTime = DateTime.now();
+        currentBitmap = null;
+        currentEditMode = ImageEditMode.NONE;
+    }
+
+    private void resetLastCoordinates(){
+        lastX = -1F;
+        lastY = -1F;
     }
 
     private int getFirstFreeIndex(final FrameLayout imageLayerLayout){
@@ -45,6 +59,33 @@ public class ImageLayerController {
             index ++;
         }
         return index;
+    }
+
+    // TODO this method is redundant because after image is added new ImageLayerEditor is created.
+    @Deprecated
+    private void removeAllLayers(){
+        while (freeIndex > 0){
+            if(imageLayerLayout.getChildAt(freeIndex) != null){
+                imageLayerLayout.removeViewAt(freeIndex);
+            }
+            freeIndex--;
+        }
+    }
+
+    public ImageEditMode getCurrentEditMode() {
+        return currentEditMode;
+    }
+
+    public void setCurrentEditMode(ImageEditMode currentEditMode) {
+        this.currentEditMode = currentEditMode;
+    }
+
+    public void setCurrentEditModeByTouchCount(int touchCount) {
+        if(touchCount == 1 && currentEditMode.isLowerThan(ImageEditMode.MOVE)){
+            this.currentEditMode = ImageEditMode.MOVE;
+        }else if (touchCount == 2){
+            this.currentEditMode = ImageEditMode.ROTATE_RESIZE;
+        }
     }
 
     public boolean hasTopLayer(){
@@ -60,8 +101,8 @@ public class ImageLayerController {
         updateLastCoordinates(x, y);
     }
 
-    private void updateEditTime(){
-        lastEditTime = DateTime.now();
+    private boolean canEditTopLayer(){
+        return !imageLayers.isEmpty() && lastEditTime.withMillis(EDIT_TIME_DELAY_MS).isBefore(DateTime.now());
     }
 
     private boolean lastCoordinatesValid(){
@@ -70,8 +111,20 @@ public class ImageLayerController {
 
     private ImageView peekTopLayerView(){
         synchronized (imageLayers){
-            return imageLayers.peek();
+            return imageLayers.peek().getImageView();
         }
+    }
+
+    private Bitmap getCurrentTopLayerBitmap(){
+        if(currentBitmap == null && hasTopLayer()){
+            currentBitmap = peekTopLayerView().getDrawingCache();
+        }
+
+        return currentBitmap;
+    }
+
+    private void updateEditTime(){
+        lastEditTime = DateTime.now();
     }
 
     public void processEditFinished(){
@@ -84,28 +137,12 @@ public class ImageLayerController {
         lastY = y;
     }
 
-    private void resetLastCoordinates(){
-        lastX = -1F;
-        lastY = -1F;
-    }
-
-    private Bitmap getCurrentTopLayerBitmap(){
-        if(currentBitmap == null && hasTopLayer()){
-            currentBitmap = peekTopLayerView().getDrawingCache();
-        }
-
-        return currentBitmap;
-    }
-
     public void processTopLayerResizeRotate(float x, float y){
         if(canEditTopLayer()){
+            // TODO
 
-            lastEditTime = DateTime.now();
+            updateEditTime();
         }
-    }
-
-    private boolean canEditTopLayer(){
-        return !imageLayers.isEmpty() && lastEditTime.withMillis(EDIT_TIME_DELAY_MS).isBefore(DateTime.now());
     }
 
     /**
@@ -117,7 +154,7 @@ public class ImageLayerController {
         view.setImageBitmap(bitmap);
         view.setDrawingCacheEnabled(true);
 
-        imageLayers.push(view);
+        imageLayers.push(new ImageLayer(view));
         imageLayerLayout.addView(view, freeIndex++);
     }
 
@@ -131,6 +168,5 @@ public class ImageLayerController {
             imageLayers.pop();
         }
     }
-
 
 }
