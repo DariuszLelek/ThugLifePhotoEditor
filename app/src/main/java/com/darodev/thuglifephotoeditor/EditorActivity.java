@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -118,34 +117,36 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                rotationDetector.onTouchEvent(motionEvent);
-                updateEditModeDisplay();
-
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                    updateGuiBarsVisible(false);
-                    imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
+                if(imageLayerEditor.hasTopLayer() && motionEvent.getPointerCount() <= 2){
+                    rotationDetector.onTouchEvent(motionEvent);
                     updateEditModeDisplay();
-                    processMotionEvent(motionEvent);
-                    return true;
-                }else{
-                    if(motionEvent.getPointerCount() == 1){
-                        imageLayerEditor.resetScaleStartPointPair();
-                        imageLayerEditor.updatePrevScaleRotation();
-                        imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
+
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                        updateGuiBarsVisibility(false);
+                        imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
                         updateEditModeDisplay();
+                        processMotionEvent(motionEvent);
+                        return true;
                     }else{
+                        if(motionEvent.getPointerCount() == 1){
+                            imageLayerEditor.resetScaleStartPointPair();
+                            imageLayerEditor.updatePrevScaleRotation();
+                            imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
+                            updateEditModeDisplay();
+                            updateGuiBarsVisibility(true);
+                        }
                         return false;
                     }
+                }else{
+                    return false;
                 }
-                updateGuiBarsVisible(true);
-                return false;
             }
         });
     }
 
-    private void updateGuiBarsVisible(boolean visible){
+    private void updateGuiBarsVisibility(boolean visible){
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
-        if(guiLayoutTopBar.getVisibility() != visibility && imageLayerEditor.hasTopLayer()){
+        if(guiLayoutTopBar.getVisibility() != visibility){
             guiLayoutBottomBar.setVisibility(visibility);
             guiLayoutTopBar.setVisibility(visibility);
         }
@@ -155,14 +156,14 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         if(imageLayerEditor.isNotBetweenEditModeSwitch()){
             if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE){
                 imageLayerEditor.processTopLayerMove(new ImageCenter(motionEvent.getX(), motionEvent.getY()));
-            }else if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
+            }else if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE_ROTATE_RESIZE){
                 imageLayerEditor.processTopLayerResizeRotate(new PointPair(motionEvent));
             }
         }
     }
 
     private void updateEditModeDisplay(){
-        textEditMode.setText(imageLayerEditor.getCurrentEditMode().toString());
+        textEditMode.setText(imageLayerEditor.getCurrentEditMode().getName());
     }
 
     private void saveEditImageDimensions(){
@@ -254,16 +255,6 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         imageLayerEditor.addLayer(imageView);
         updateRotateButton();
         updateRemoveBitmapButton();
-
-//        imageView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                imageLayerEditor.addLayer(imageView);
-//                updateRotateButton();
-//                updateRemoveBitmapButton();
-//            }
-//        });
-//        imageView.invalidate();
     }
 
     public void onRemove(View view){
@@ -311,7 +302,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
     @Override
     public void OnRotation(RotationGestureDetector rotationDetector) {
-        if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.ROTATE_RESIZE){
+        if(imageLayerEditor.getCurrentEditMode() == ImageEditMode.MOVE_ROTATE_RESIZE){
             imageLayerEditor.setCurrentRotation(rotationDetector.getAngle());
         }
     }

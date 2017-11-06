@@ -2,6 +2,9 @@
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <color name="btn_tint">#c97a7a</color>
-    <color name="gui_bar">#2affffff</color>
+    <color name="gui_bar_back">#2affffff</color>
+
+    <color name="edit_mode_label">#65000000</color>
+    <color name="edit_mode_label_background">#65000000</color>
 
 </resources>

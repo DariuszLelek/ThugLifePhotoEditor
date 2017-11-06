@@ -6,5 +6,17 @@ package com.darodev.thuglifephotoeditor.image;
  */
 
 public enum ImageEditMode {
-    NONE, MOVE, ROTATE_RESIZE
+    NONE(""),
+    MOVE("move"),
+    MOVE_ROTATE_RESIZE("move, rotate, resize");
+
+    private String name;
+
+    ImageEditMode(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

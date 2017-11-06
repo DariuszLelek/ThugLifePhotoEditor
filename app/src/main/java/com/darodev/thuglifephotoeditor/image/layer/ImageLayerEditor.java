@@ -71,7 +71,7 @@ public class ImageLayerEditor {
         if(touchCount == 1){
             changeCurrentEditMode(ImageEditMode.MOVE);
         }else if (touchCount == 2){
-            changeCurrentEditMode(ImageEditMode.ROTATE_RESIZE);
+            changeCurrentEditMode(ImageEditMode.MOVE_ROTATE_RESIZE);
         }
     }
 
