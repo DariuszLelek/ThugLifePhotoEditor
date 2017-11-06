@@ -48,7 +48,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private ConfigUtility configUtility;
     private Resources resources;
     private ImageView editImageView;
-    private ImageButton btnRotate, btnRemove;
+    private ImageButton btnRotate, btnRemove, btnSave;
     private TextView textEditMode;
     private LinearLayout guiLayoutTopBar, guiLayoutBottomBar;
 
@@ -71,6 +71,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         btnRotate = findViewById(R.id.btn_rotate);
         btnRemove = findViewById(R.id.btn_remove);
+        btnSave = findViewById(R.id.btn_save);
         textEditMode = findViewById(R.id.txt_edit_mode);
         guiLayoutTopBar = findViewById(R.id.layout_gui_top_bar);
         guiLayoutBottomBar = findViewById(R.id.layout_gui_bottom_bar);
@@ -85,6 +86,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         updateRemoveBitmapButton();
         updateEditModeDisplay();
+        updateSaveButton();
 
         prepareLayerListener();
         prepareAds();
@@ -255,6 +257,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         imageLayerEditor.addLayer(imageView);
         updateRotateButton();
         updateRemoveBitmapButton();
+        updateSaveButton();
     }
 
     public void onRemove(View view){
@@ -262,10 +265,15 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         updateRotateButton();
         updateRemoveBitmapButton();
+        updateSaveButton();
     }
 
     private void updateRotateButton(){
         setImageButtonEnabled(btnRotate, !imageLayerEditor.hasTopLayer());
+    }
+
+    private void updateSaveButton(){
+        setImageButtonEnabled(btnSave, imageEditor.isImageEdited());
     }
 
     private void prepareAds() {
