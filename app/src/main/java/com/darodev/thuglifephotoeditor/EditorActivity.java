@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +51,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private ImageView editImageView;
     private ImageButton btnRotate, btnRemove;
     private TextView textEditMode;
+    private LinearLayout guiLayoutTopBar, guiLayoutBottomBar;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
@@ -71,6 +73,8 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         btnRotate = findViewById(R.id.btn_rotate);
         btnRemove = findViewById(R.id.btn_remove);
         textEditMode = findViewById(R.id.txt_edit_mode);
+        guiLayoutTopBar = findViewById(R.id.layout_gui_top_bar);
+        guiLayoutBottomBar = findViewById(R.id.layout_gui_bottom_bar);
 
         editImageView = findViewById(R.id.view_edit_image);
         editImageView.post(new Runnable() {
@@ -118,6 +122,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                 updateEditModeDisplay();
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    updateGuiBarsVisible(false);
                     imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
                     updateEditModeDisplay();
                     processMotionEvent(motionEvent);
@@ -128,12 +133,22 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                         imageLayerEditor.updatePrevScaleRotation();
                         imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
                         updateEditModeDisplay();
+                    }else{
+                        return false;
                     }
                 }
-
+                updateGuiBarsVisible(true);
                 return false;
             }
         });
+    }
+
+    private void updateGuiBarsVisible(boolean visible){
+        int visibility = visible ? View.VISIBLE : View.INVISIBLE;
+        if(guiLayoutTopBar.getVisibility() != visibility && imageLayerEditor.hasTopLayer()){
+            guiLayoutBottomBar.setVisibility(visibility);
+            guiLayoutTopBar.setVisibility(visibility);
+        }
     }
 
     private void processMotionEvent(MotionEvent motionEvent){
