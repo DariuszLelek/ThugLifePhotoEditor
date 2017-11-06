@@ -8,5 +8,12 @@
 
 
     <string name="content_desc_picture">Picture to edit</string>
+    <string name="content_desc_camera">Camera</string>
+    <string name="content_desc_save">Picture to edit</string>
+    <string name="content_desc_share">Share</string>
+    <string name="content_desc_add">Add Bitmap</string>
+    <string name="content_desc_remove">Remove Bitmap</string>
+    <string name="content_desc_rotate">Rotate</string>
+    <string name="content_desc_folder">Folder</string>
     <string name="default_layer">Default layer to be copied for inserting new bitmaps</string>
 </resources>

@@ -17,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,7 +48,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private ConfigUtility configUtility;
     private Resources resources;
     private ImageView editImageView;
-    private Button btnRotate, btnRemoveBitmap;
+    private ImageButton btnRotate, btnRemove;
     private TextView textEditMode;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
@@ -69,7 +69,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
 
         btnRotate = findViewById(R.id.btn_rotate);
-        btnRemoveBitmap = findViewById(R.id.btn_remove_bitmap);
+        btnRemove = findViewById(R.id.btn_remove);
         textEditMode = findViewById(R.id.txt_edit_mode);
 
         editImageView = findViewById(R.id.view_edit_image);
@@ -101,7 +101,12 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void updateRemoveBitmapButton(){
-        btnRemoveBitmap.setEnabled(imageLayerEditor.hasTopLayer());
+        setImageButtonEnabled(btnRemove, imageLayerEditor.hasTopLayer());
+    }
+
+    private void setImageButtonEnabled(ImageButton button, boolean enabled){
+        button.setAlpha(enabled ? 1F : ConfigUtility.DISABLED_BUTTON_ALPHA);
+        button.setEnabled(enabled);
     }
 
     private void prepareLayerListener() {
@@ -149,7 +154,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         configUtility.save(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
     }
 
-    public void btnTakePicture(View view) {
+    public void onCamera(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             askToSave();
             dispatchTakePictureIntent();
@@ -158,7 +163,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         }
     }
 
-    public void onSelectPictureClick(View view) {
+    public void onFolder(View view) {
         askToSave();
         dispatchSelectPictureIntent();
     }
@@ -216,12 +221,12 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         editImageView.setImageBitmap(imageEditor.getImage());
     }
 
-    public void onRotateClick(View view){
+    public void onRotate(View view){
         imageEditor.rotateImage();
         refreshImageBitmap();
     }
 
-    public void onAddBitmapClick(View view){
+    public void onAdd(View view){
         imageEditor.setImageIsEdited();
 
         final ImageView imageView = new ImageView(getApplicationContext());
@@ -230,17 +235,23 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                 BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
                 imageEditor.isImageRotated() ? 90 : 0));
         imageView.setDrawingCacheEnabled(true);
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                imageLayerEditor.addLayer(imageView);
-                updateRotateButton();
-                updateRemoveBitmapButton();
-            }
-        });
+
+        imageLayerEditor.addLayer(imageView);
+        updateRotateButton();
+        updateRemoveBitmapButton();
+
+//        imageView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                imageLayerEditor.addLayer(imageView);
+//                updateRotateButton();
+//                updateRemoveBitmapButton();
+//            }
+//        });
+//        imageView.invalidate();
     }
 
-    public void onRemoveBitmapClick(View view){
+    public void onRemove(View view){
         imageLayerEditor.removeTopLayer();
 
         updateRotateButton();
@@ -248,7 +259,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void updateRotateButton(){
-        btnRotate.setEnabled(!imageLayerEditor.hasTopLayer());
+        setImageButtonEnabled(btnRotate, !imageLayerEditor.hasTopLayer());
     }
 
     private void prepareAds() {

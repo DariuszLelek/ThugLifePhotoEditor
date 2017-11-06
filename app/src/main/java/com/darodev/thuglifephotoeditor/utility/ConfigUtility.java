@@ -18,6 +18,8 @@ public class ConfigUtility {
     private final SharedPreferences preferences;
     private final Map<Integer, String> cachedKeys = new ConcurrentHashMap<>();
 
+    public static final float DISABLED_BUTTON_ALPHA = 0.2F;
+
     public ConfigUtility(Resources resources, SharedPreferences preferences) {
         this.resources = resources;
         this.preferences = preferences;

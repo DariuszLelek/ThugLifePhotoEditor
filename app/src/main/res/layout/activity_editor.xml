@@ -1,108 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_app"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.darodev.thuglifephotoeditor.EditorActivity">
+    android:layout_weight="1">
 
     <FrameLayout
-        android:id="@+id/layout_app"
+        android:id="@+id/layout_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/view_edit_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/content_desc_picture"
+            app:srcCompat="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/txt_edit_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="TextView"/>
 
         <FrameLayout
-            android:id="@+id/layout_image"
+            android:id="@+id/layout_image_layer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/view_edit_image"
+                android:id="@+id/view_image_default_layer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/content_desc_picture"
+                android:contentDescription="@string/default_layer"
                 app:srcCompat="@android:color/transparent"/>
 
-            <TextView
-                android:id="@+id/txt_edit_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:text="TextView"/>
-
-            <Button
-                android:id="@+id/btn_remove_bitmap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:onClick="onRemoveBitmapClick"
-                android:text="remove"/>
-
-            <Button
-                android:id="@+id/btn_add_bitmap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:onClick="onAddBitmapClick"
-                android:text="add bmp"/>
-
-            <FrameLayout
-                android:id="@+id/layout_image_layer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/view_image_default_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/default_layer"
-                    app:srcCompat="@android:color/transparent"/>
-
-            </FrameLayout>
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/layout_gui"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="btnTakePicture"
-                android:text="Button"/>
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="onSelectPictureClick"
-                android:text="pic"/>
-
-            <Button
-                android:id="@+id/btn_rotate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:onClick="onRotateClick"
-                android:text="rotate"/>
         </FrameLayout>
 
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/layout_ad"
+        android:id="@+id/layout_gui"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
-        android:gravity="bottom|center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_gui_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/gui_bar"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_desc_camera"
+                    android:onClick="onCamera"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/btn_tint"
+                    app:srcCompat="@drawable/ic_camera_black_160dp"/>
+
+                <ImageButton
+                    android:id="@+id/btn_folder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_desc_folder"
+                    android:onClick="onFolder"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/btn_tint"
+                    app:srcCompat="@drawable/ic_folder_open_black_160dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_desc_save"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/btn_tint"
+                    app:srcCompat="@drawable/ic_save_black_160dp"/>
+
+                <ImageButton
+                    android:id="@+id/btn_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_desc_share"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/btn_tint"
+                    app:srcCompat="@drawable/ic_share_black_160dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+
+        <LinearLayout
+            android:id="@+id/layout_gui_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/gui_bar"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:contentDescription="@string/content_desc_remove"
+                android:onClick="onRemove"
+                android:scaleType="fitCenter"
+                android:tint="@color/btn_tint"
+                app:srcCompat="@drawable/ic_remove_circle_outline_black_160dp"/>
+
+            <ImageButton
+                android:id="@+id/btn_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:contentDescription="@string/content_desc_add"
+                android:onClick="onAdd"
+                android:scaleType="fitCenter"
+                android:tint="@color/btn_tint"
+                app:srcCompat="@drawable/ic_add_circle_outline_black_160dp"/>
+
+            <ImageButton
+                android:id="@+id/btn_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:contentDescription="@string/content_desc_rotate"
+                android:onClick="onRotate"
+                android:scaleType="fitCenter"
+                android:tint="@color/btn_tint"
+                app:srcCompat="@drawable/ic_rotate_90_degrees_ccw_black_160dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:gravity="bottom|center"
+            android:orientation="horizontal">
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

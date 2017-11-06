@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="btn_tint">#c97a7a</color>
+    <color name="gui_bar">#2affffff</color>
+
 </resources>
