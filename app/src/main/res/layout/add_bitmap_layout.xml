@@ -367,7 +367,7 @@
                 android:focusable="true"
                 android:onClick="onBitmapClick"
                 android:scaleType="centerCrop"
-                android:tag="53"
+                android:tag="43"
                 app:srcCompat="@mipmap/img_43"/>
 
             <ImageView
