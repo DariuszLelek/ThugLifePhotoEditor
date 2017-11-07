@@ -19,16 +19,6 @@
             android:contentDescription="@string/content_desc_picture"
             app:srcCompat="@android:color/transparent"/>
 
-        <TextView
-            android:id="@+id/txt_edit_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="12dp"
-            android:background="@color/gui_bar_back"
-            android:textColor="@color/edit_mode_label"
-            android:textSize="18sp"/>
-
         <FrameLayout
             android:id="@+id/layout_image_layer"
             android:layout_width="match_parent"
@@ -42,6 +32,16 @@
                 app:srcCompat="@android:color/transparent"/>
 
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/txt_edit_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="12dp"
+            android:background="@color/gui_bar_back"
+            android:textColor="@color/edit_mode_label"
+            android:textSize="18sp"/>
 
     </FrameLayout>
 

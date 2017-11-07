@@ -77,7 +77,7 @@ public enum ImageBitmap {
         return resId;
     }
 
-    public static ImageBitmap getResIdByTag(String tag){
+    public static ImageBitmap getByTag(String tag){
         for(ImageBitmap imageBitmap : values()){
             if(imageBitmap.getTag().equals(tag)){
                 return imageBitmap;

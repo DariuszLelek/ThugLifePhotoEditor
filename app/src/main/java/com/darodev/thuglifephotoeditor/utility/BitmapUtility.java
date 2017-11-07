@@ -95,7 +95,8 @@ public class BitmapUtility {
 
     public static void setImageBitmap(ImageView imageView, Bitmap bitmap) {
         if(imageView != null){
-            recycle(imageView.getDrawingCache());
+            imageView.setDrawingCacheEnabled(true);
+            //recycle(imageView.getDrawingCache());
             imageView.setImageBitmap(bitmap);
         }
     }

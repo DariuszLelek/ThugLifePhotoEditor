@@ -3,17 +3,14 @@ package com.darodev.thuglifephotoeditor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
+import com.darodev.thuglifephotoeditor.image.ImageBitmap;
 import com.darodev.thuglifephotoeditor.image.ImageEditMode;
 import com.darodev.thuglifephotoeditor.image.ImageEditor;
 import com.darodev.thuglifephotoeditor.image.layer.ImageCenter;
@@ -267,10 +265,8 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         final ImageView imageView = new ImageView(getApplicationContext());
         imageView.setLayoutParams((findViewById(R.id.view_image_default_layer)).getLayoutParams());
-        Bitmap b2 = BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0);
-        imageView.setDrawingCacheEnabled(true);
 
-        BitmapUtility.setImageBitmap(imageView, b2);
+        BitmapUtility.setImageBitmap(imageView, BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0));
 
         imageLayerEditor.addLayer(imageView);
         updateRotateButton();
@@ -327,15 +323,19 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     public void onBitmapClick(View view){
-        if(view instanceof ImageView){
-            ImageView imageView = (ImageView) view;
-            imageView.setDrawingCacheEnabled(true);
-            Bitmap bitmap = imageView.getDrawingCache();
-            if(bitmap != null){
-                onBitmapSelected(bitmap);
-            }
+        ImageBitmap imageBitmap = getImageBitmapByViewTagObject(view.getTag());
+
+        if(imageBitmap != ImageBitmap.UNKNOWN){
+            onBitmapSelected(BitmapFactory.decodeResource(resources, imageBitmap.getResId()));
+        }else{
+            Toast.makeText(this, "Selection Error", Toast.LENGTH_SHORT).show();
         }
+
         addBitmapDialog.hide();
+    }
+
+    private ImageBitmap getImageBitmapByViewTagObject(Object tag){
+        return tag instanceof String ? ImageBitmap.getByTag((String) tag) : ImageBitmap.UNKNOWN;
     }
 
     @Override
