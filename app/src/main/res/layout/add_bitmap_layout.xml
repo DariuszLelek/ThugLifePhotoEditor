@@ -140,8 +140,755 @@
                 android:focusable="true"
                 android:onClick="onBitmapClick"
                 android:scaleType="centerCrop"
+                android:tag="08"
+                app:srcCompat="@mipmap/img_08"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="11"
+                app:srcCompat="@mipmap/img_11"/>
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="12"
+                app:srcCompat="@mipmap/img_12"/>
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="13"
+                app:srcCompat="@mipmap/img_13"/>
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
                 android:tag="10"
                 app:srcCompat="@mipmap/img_10"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="13"
+                app:srcCompat="@mipmap/img_33"/>
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="31"
+                app:srcCompat="@mipmap/img_31"/>
+
+            <ImageView
+                android:id="@+id/imageView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="34"
+                app:srcCompat="@mipmap/img_34"/>
+
+            <ImageView
+                android:id="@+id/imageView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="32"
+                app:srcCompat="@mipmap/img_32"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="44"
+                app:srcCompat="@mipmap/img_44"/>
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="45"
+                app:srcCompat="@mipmap/img_45"/>
+
+            <ImageView
+                android:id="@+id/imageView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="41"
+                app:srcCompat="@mipmap/img_41"/>
+
+            <ImageView
+                android:id="@+id/imageView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="42"
+                app:srcCompat="@mipmap/img_42"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="53"
+                app:srcCompat="@mipmap/img_43"/>
+
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="54"
+                app:srcCompat="@mipmap/img_54"/>
+
+            <ImageView
+                android:id="@+id/imageView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="53"
+                app:srcCompat="@mipmap/img_53"/>
+
+            <ImageView
+                android:id="@+id/imageView24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="22"
+                app:srcCompat="@mipmap/img_22"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="20"
+                app:srcCompat="@mipmap/img_20"/>
+
+            <ImageView
+                android:id="@+id/imageView26"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="21"
+                app:srcCompat="@mipmap/img_21"/>
+
+            <ImageView
+                android:id="@+id/imageView27"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="23"
+                app:srcCompat="@mipmap/img_23"/>
+
+            <ImageView
+                android:id="@+id/imageView28"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="50"
+                app:srcCompat="@mipmap/img_50"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView29"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="51"
+                app:srcCompat="@mipmap/img_51"/>
+
+            <ImageView
+                android:id="@+id/imageView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="52"
+                app:srcCompat="@mipmap/img_52"/>
+
+            <ImageView
+                android:id="@+id/imageView31"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="61"
+                app:srcCompat="@mipmap/img_61"/>
+
+            <ImageView
+                android:id="@+id/imageView32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="62"
+                app:srcCompat="@mipmap/img_62"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView33"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="63"
+                app:srcCompat="@mipmap/img_63"/>
+
+            <ImageView
+                android:id="@+id/imageView34"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="64"
+                app:srcCompat="@mipmap/img_64"/>
+
+            <ImageView
+                android:id="@+id/imageView35"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="65"
+                app:srcCompat="@mipmap/img_65"/>
+
+            <ImageView
+                android:id="@+id/imageView36"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="84"
+                app:srcCompat="@mipmap/img_84"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView37"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="80"
+                app:srcCompat="@mipmap/img_80"/>
+
+            <ImageView
+                android:id="@+id/imageView38"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="81"
+                app:srcCompat="@mipmap/img_81"/>
+
+            <ImageView
+                android:id="@+id/imageView39"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="82"
+                app:srcCompat="@mipmap/img_82"/>
+
+            <ImageView
+                android:id="@+id/imageView40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="83"
+                app:srcCompat="@mipmap/img_83"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView41"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="71"
+                app:srcCompat="@mipmap/img_71"/>
+
+            <ImageView
+                android:id="@+id/imageView42"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="74"
+                app:srcCompat="@mipmap/img_74"/>
+
+            <ImageView
+                android:id="@+id/imageView43"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="72"
+                app:srcCompat="@mipmap/img_72"/>
+
+            <ImageView
+                android:id="@+id/imageView44"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="73"
+                app:srcCompat="@mipmap/img_73"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView45"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="75"
+                app:srcCompat="@mipmap/img_75"/>
+
+            <ImageView
+                android:id="@+id/imageView46"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="90"
+                app:srcCompat="@mipmap/img_90"/>
+
+            <ImageView
+                android:id="@+id/imageView47"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="91"
+                app:srcCompat="@mipmap/img_91"/>
+
+            <ImageView
+                android:id="@+id/imageView48"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="92"
+                app:srcCompat="@mipmap/img_92"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView49"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="93"
+                app:srcCompat="@mipmap/img_93"/>
+
+            <ImageView
+                android:id="@+id/imageView50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="94"
+                app:srcCompat="@mipmap/img_94"/>
+
+            <ImageView
+                android:id="@+id/imageView51"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:onClick="onBitmapClick"
+                android:scaleType="centerCrop"
+                android:tag="95"
+                app:srcCompat="@mipmap/img_95"/>
+
+            <ImageView
+                android:id="@+id/imageView52"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:clickable="false"
+                android:contentDescription="@string/bitmap"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                android:tag="92"
+                app:srcCompat="@null"/>
 
         </LinearLayout>
 
