@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
 import com.darodev.thuglifephotoeditor.image.layer.ImageCenter;
@@ -63,21 +64,15 @@ public class BitmapUtility {
         return Math.max(bitmap.getHeight(), bitmap.getWidth());
     }
 
-    public static Bitmap manipulate(Bitmap bitmap, float rotationAngleDegree, float scale, ImageCenter imageCenter){
-        int w = bitmap.getWidth();
-        int h = bitmap.getHeight();
+    public static Bitmap manipulate(final Bitmap bitmap, float rotationAngleDegree, float scale, ImageCenter imageCenter){
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
 
-        int newW = w, newH = h;
-        if (rotationAngleDegree == 90 || rotationAngleDegree == 270) {
-            newW = h;
-            newH = w;
-        }
-
-        Bitmap rotatedBitmap = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
+        Bitmap rotatedBitmap = Bitmap.createBitmap(width, height, bitmap.getConfig());
         Canvas canvas = new Canvas(rotatedBitmap);
 
         Matrix matrix = new Matrix();
-        matrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
+        matrix.postTranslate(-width / 2, -height / 2);
         matrix.postScale(scale,scale);
         matrix.postRotate(rotationAngleDegree);
         matrix.postTranslate(imageCenter.getX(), imageCenter.getY());
@@ -91,9 +86,24 @@ public class BitmapUtility {
         if(degrees != 0){
             Matrix matrix = new Matrix();
             matrix.postRotate(degrees);
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            recycle(bitmap);
+            bitmap = rotated;
         }
         return bitmap;
+    }
+
+    public static void setImageBitmap(ImageView imageView, Bitmap bitmap) {
+        if(imageView != null){
+            recycle(imageView.getDrawingCache());
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    public static void recycle(Bitmap bitmap){
+        if(bitmap != null){
+            bitmap.recycle();
+        }
     }
 
     @Deprecated

@@ -16,4 +16,5 @@
     <string name="content_desc_rotate">Rotate</string>
     <string name="content_desc_folder">Folder</string>
     <string name="default_layer">Default layer to be copied for inserting new bitmaps</string>
+    <string name="bitmap">Bitmap</string>
 </resources>

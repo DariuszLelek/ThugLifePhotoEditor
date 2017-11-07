@@ -3,12 +3,17 @@ package com.darodev.thuglifephotoeditor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,6 +57,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private ImageButton btnRotate, btnRemove, btnSave;
     private TextView textEditMode;
     private LinearLayout guiLayoutTopBar, guiLayoutBottomBar;
+    private Dialog addBitmapDialog;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
     static final int REQUEST_CAMERA_PERMISSION = 5601;
@@ -236,7 +243,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void refreshImageBitmap(){
-        editImageView.setImageBitmap(imageEditor.getImage());
+        BitmapUtility.setImageBitmap(editImageView, imageEditor.getImage());
     }
 
     public void onRotate(View view){
@@ -245,14 +252,25 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     public void onAdd(View view){
+        showBitmapSelectionDialog();
+    }
+
+    private void showBitmapSelectionDialog(){
+        addBitmapDialog = new Dialog(this);
+        addBitmapDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        addBitmapDialog.setContentView(R.layout.add_bitmap_layout);
+        addBitmapDialog.show();
+    }
+
+    private void onBitmapSelected(Bitmap bitmap){
         imageEditor.setImageIsEdited();
 
         final ImageView imageView = new ImageView(getApplicationContext());
         imageView.setLayoutParams((findViewById(R.id.view_image_default_layer)).getLayoutParams());
-        imageView.setImageBitmap(BitmapUtility.rotate(
-                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_2),
-                imageEditor.isImageRotated() ? 90 : 0));
+        Bitmap b2 = BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0);
         imageView.setDrawingCacheEnabled(true);
+
+        BitmapUtility.setImageBitmap(imageView, b2);
 
         imageLayerEditor.addLayer(imageView);
         updateRotateButton();
@@ -306,6 +324,18 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
             adView.loadAd(adRequest);
         }
         return adView;
+    }
+
+    public void onBitmapClick(View view){
+        if(view instanceof ImageView){
+            ImageView imageView = (ImageView) view;
+            imageView.setDrawingCacheEnabled(true);
+            Bitmap bitmap = imageView.getDrawingCache();
+            if(bitmap != null){
+                onBitmapSelected(bitmap);
+            }
+        }
+        addBitmapDialog.hide();
     }
 
     @Override

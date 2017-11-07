@@ -3,6 +3,8 @@ package com.darodev.thuglifephotoeditor.image.layer;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
+
 /**
  * Created by Dariusz Lelek on 11/5/2017.
  * dariusz.lelek@gmail.com
