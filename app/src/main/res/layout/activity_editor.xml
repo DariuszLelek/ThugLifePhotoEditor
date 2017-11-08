@@ -46,17 +46,10 @@
 
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_gui_ad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <LinearLayout
             android:id="@+id/layout_gui"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -208,18 +201,16 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_ad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:gravity="bottom|center"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_ad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray"
-            android:gravity="bottom|center"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 </FrameLayout>
