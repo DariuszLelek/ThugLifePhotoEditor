@@ -10,13 +10,11 @@ import android.support.annotation.Nullable;
  */
 
 public class BitmapHolder {
-    public static final BitmapHolder EMPTY = new BitmapHolder(null, 0);
-
     private final Bitmap bitmap;
     private final int rotationDegrees;
 
-    public BitmapHolder(@Nullable Bitmap bitmap, int rotationDegrees) {
-        this.bitmap = bitmap != null ? bitmap : getEmptyBitmap();
+    public BitmapHolder(@NonNull Bitmap bitmap, int rotationDegrees) {
+        this.bitmap = bitmap;
         this.rotationDegrees = rotationDegrees;
     }
 

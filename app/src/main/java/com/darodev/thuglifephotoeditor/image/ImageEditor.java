@@ -19,6 +19,10 @@ public class ImageEditor {
 
     private final ConfigUtility configUtility;
 
+    public ImageEditor(ConfigUtility configUtility) {
+        this.configUtility = configUtility;
+    }
+
     public ImageEditor(BitmapHolder bitmapHolder, ConfigUtility configUtility) {
         this.configUtility = configUtility;
 

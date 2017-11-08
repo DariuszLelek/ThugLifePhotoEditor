@@ -76,7 +76,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         permissionControl = new PermissionControl(getApplicationContext(), this);
         configUtility = createConfigUtility();
         imageLayerEditor = createImageLayerController();
-        imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
+        imageEditor = new ImageEditor(configUtility);
 
         btnRotate = findViewById(R.id.btn_rotate);
         btnRemove = findViewById(R.id.btn_remove);
@@ -195,7 +195,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
     public void onSave(View view) {
         if (permissionControl.isPermissionGranted(Permission.WRITE_STORAGE)) {
-            saveImage();
+            saveImage(getImageBitmap());
         } else {
             permissionControl.requestPermission(Permission.WRITE_STORAGE);
         }
@@ -208,13 +208,15 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         }
     }
 
-    private void saveImage(){
-        Bitmap imageBitmap = getImageBitmap();
-
-
-
-        // TODO save to file
-        processPictureInsert(new BitmapHolder(imageBitmap, 0));
+    private void saveImage(@NonNull final Bitmap bitmap){
+        //TODO save success
+        if(true){
+            // TODO save to file
+            processPictureInsert(new BitmapHolder(bitmap, 0));
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private Bitmap getImageBitmap(){
@@ -262,7 +264,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         if(grantedPermission == Permission.CAMERA){
             dispatchTakePictureIntent();
         }else if(grantedPermission == Permission.WRITE_STORAGE) {
-            saveImage();
+            saveImage(getImageBitmap());
         }
     }
 

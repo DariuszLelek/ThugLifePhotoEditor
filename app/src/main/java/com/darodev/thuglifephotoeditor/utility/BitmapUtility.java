@@ -27,11 +27,13 @@ import java.io.IOException;
 public class BitmapUtility {
     private static final Paint bitmapPaint = new Paint( Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG );
     private static final Matrix defaultMatrix = new Matrix();
+    private static final Bitmap defaultBitmap = Bitmap.createBitmap(1,1, Bitmap.Config.ARGB_4444);
 
     @NonNull
     public static BitmapHolder getFromIntentData(Intent intent, Context context) {
         if (intent.getData() == null && intent.getExtras() != null) {
-            return new BitmapHolder((Bitmap) intent.getExtras().get("data"), 0);
+            Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+            return new BitmapHolder(bitmap != null ? bitmap : defaultBitmap, 0);
         } else {
             try {
 
@@ -51,7 +53,7 @@ public class BitmapUtility {
                 e.printStackTrace();
             }
         }
-        return BitmapHolder.EMPTY;
+        return new BitmapHolder(defaultBitmap, 0);
     }
 
     public static Bitmap getScaledBitmap(Bitmap original, float scale) {
