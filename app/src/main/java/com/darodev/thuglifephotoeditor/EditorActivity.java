@@ -269,7 +269,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
             }
         });
 
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dispatchPendingRequest();
                 dialog.dismiss();
