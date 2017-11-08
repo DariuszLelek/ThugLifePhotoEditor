@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -82,6 +83,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         guiLayoutBottomBar = findViewById(R.id.layout_gui_bottom_bar);
 
         editImageView = findViewById(R.id.view_edit_image);
+        editImageView.setDrawingCacheEnabled(true);
         editImageView.post(new Runnable() {
             @Override
             public void run() {
@@ -89,12 +91,17 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
             }
         });
 
-        updateRemoveBitmapButton();
-        updateEditModeDisplay();
-        updateSaveButton();
+        refreshGui();
 
         prepareLayerListener();
         prepareAds();
+    }
+
+    private void refreshGui(){
+        updateRotateButton();
+        updateRemoveBitmapButton();
+        updateEditModeDisplay();
+        updateSaveButton();
     }
 
     private ConfigUtility createConfigUtility(){
@@ -104,10 +111,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private ImageLayerEditor createImageLayerController(){
-        return new ImageLayerEditor(
-                this.getApplicationContext(),
-                (ImageView) findViewById(R.id.view_image_default_layer),
-                (FrameLayout) findViewById(R.id.layout_image_layer));
+        return new ImageLayerEditor(this.getApplicationContext(), (FrameLayout) findViewById(R.id.layout_image_layer));
     }
 
     private void updateRemoveBitmapButton(){
@@ -191,6 +195,24 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         dispatchSelectPictureIntent();
     }
 
+    public void onSave(View view) {
+        Bitmap bitmap = editImageView.getDrawingCache();
+        drawAllBitmapsToCanvas(new Canvas(bitmap));
+
+        // TODO save to file
+
+        // TODO fix rotation issues - save image in one rotation/ change add save
+        int rot = imageEditor.getRotationDegrees();
+
+        processPictureInsert(new BitmapHolder(bitmap, imageEditor.getRotationDegrees()));
+    }
+
+    private void drawAllBitmapsToCanvas(Canvas canvas){
+        for(int index = imageLayerEditor.getFreeIndex(); index > 0; index --){
+            BitmapUtility.drawViewBitmapOnCanvas(canvas, imageLayerEditor.getImageLayerLayout().getChildAt(index));
+        }
+    }
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -229,8 +251,10 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private void processPictureInsert(BitmapHolder bitmapHolder) {
         imageEditor.recycleBitmap();
         imageEditor = new ImageEditor(bitmapHolder, configUtility);
-        refreshImageBitmap();
         imageLayerEditor.reset();
+
+        refreshImageBitmap();
+        refreshGui();
     }
 
     private void askToSave(){
@@ -269,17 +293,12 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         BitmapUtility.setImageBitmap(imageView, BitmapUtility.rotate(bitmap, imageEditor.isImageRotated() ? 90 : 0));
 
         imageLayerEditor.addLayer(imageView);
-        updateRotateButton();
-        updateRemoveBitmapButton();
-        updateSaveButton();
+        refreshGui();
     }
 
     public void onRemove(View view){
         imageLayerEditor.removeTopLayer();
-
-        updateRotateButton();
-        updateRemoveBitmapButton();
-        updateSaveButton();
+        refreshGui();
     }
 
     private void updateRotateButton(){
@@ -287,7 +306,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void updateSaveButton(){
-        setImageButtonEnabled(btnSave, imageEditor.isImageEdited());
+        setImageButtonEnabled(btnSave, imageEditor.isImageEdited() && imageLayerEditor.hasTopLayer());
     }
 
     private void prepareAds() {

@@ -42,6 +42,10 @@ public class ImageEditor {
         this.rotationDegrees = 0;
     }
 
+    public int getRotationDegrees(){
+        return rotationDegrees;
+    }
+
     private void scaleBitmapToFitView(){
         float maxWidth = configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
         float scale =  maxWidth / BitmapUtility.getLongerSide(image);

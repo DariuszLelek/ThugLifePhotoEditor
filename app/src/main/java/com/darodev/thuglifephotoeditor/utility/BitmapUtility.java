@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.darodev.thuglifephotoeditor.image.BitmapHolder;
@@ -25,6 +26,7 @@ import java.io.IOException;
 
 public class BitmapUtility {
     private static final Paint bitmapPaint = new Paint( Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG );
+    private static final Matrix defaultMatrix = new Matrix();
 
     @NonNull
     public static BitmapHolder getFromIntentData(Intent intent, Context context) {
@@ -58,6 +60,15 @@ public class BitmapUtility {
                 Math.round(original.getWidth() * scale),
                 Math.round(original.getHeight() * scale),
                 true);
+    }
+
+    public static void drawViewBitmapOnCanvas(final Canvas canvas, View view){
+        if(view != null){
+            view.invalidate();
+            Bitmap bitmap = view.getDrawingCache();
+            canvas.drawBitmap(bitmap, defaultMatrix, bitmapPaint);
+            recycle(bitmap);
+        }
     }
 
     public static float getLongerSide(Bitmap bitmap){

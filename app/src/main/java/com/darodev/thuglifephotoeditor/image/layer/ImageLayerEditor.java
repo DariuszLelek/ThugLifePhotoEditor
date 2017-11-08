@@ -19,8 +19,6 @@ import java.util.Stack;
  */
 
 public class ImageLayerEditor {
-    private final Context context;
-    private final ImageView defaultLayer;
     private final FrameLayout imageLayerLayout;
     private final ImageLayer emptyLayer;
     private final Stack<ImageLayer> imageLayers = new Stack<>();
@@ -33,21 +31,26 @@ public class ImageLayerEditor {
     private static final int EDIT_MODE_TIME_DELAY_MS = 75;
 
 
-    public ImageLayerEditor(Context context, ImageView defaultLayer, FrameLayout imageLayerLayout) {
-        this.context = context;
-        this.defaultLayer = defaultLayer;
+    public ImageLayerEditor(Context context, FrameLayout imageLayerLayout) {
         this.imageLayerLayout = imageLayerLayout;
-        this.emptyLayer = new ImageLayer(new ImageView(context));
+        this.emptyLayer = new ImageLayer(new ImageView(context), 0);
 
         reset();
     }
 
     public void reset(){
         imageLayers.clear();
+        clearImageLayerLayout();
         freeIndex = getFirstFreeIndex(imageLayerLayout);
         lastEditTime = DateTime.now();
         currentEditMode = ImageEditMode.NONE;
         scaleStartPointPair = PointPair.INVALID_PAIR;
+    }
+
+    private void clearImageLayerLayout(){
+        for(int index = imageLayerLayout.getChildCount() - 1; index > 0; index --){
+            imageLayerLayout.removeViewAt(index);
+        }
     }
 
     private int getFirstFreeIndex(final FrameLayout imageLayerLayout){
@@ -105,6 +108,10 @@ public class ImageLayerEditor {
         return !imageLayers.isEmpty();
     }
 
+    public ImageLayer getTopLayer(){
+        return hasTopLayer() ? imageLayers.pop() : null;
+    }
+
     private void updateEditTime(){
         lastEditTime = DateTime.now();
     }
@@ -133,6 +140,10 @@ public class ImageLayerEditor {
         return canGetScale(pointPair) ? scaleStartPointPair.getScaleResult(pointPair) : 1.0F;
     }
 
+    public int getFreeIndex() {
+        return freeIndex;
+    }
+
     private boolean canGetScale(PointPair pointPair){
         return scaleStartPointPair.isValid() && pointPair.isValid() && !scaleStartPointPair.equals(pointPair);
     }
@@ -145,12 +156,16 @@ public class ImageLayerEditor {
         return BitmapUtility.manipulate(topLayer.getOriginalBitmap(), -topLayer.getRotation(), topLayer.getScale(), imageCenter);
     }
 
+    public FrameLayout getImageLayerLayout() {
+        return imageLayerLayout;
+    }
+
     /**
      * Add new Layer over image with selected Bitmap
      */
     public void addLayer(ImageView view){
+        imageLayers.push(new ImageLayer(view, freeIndex));
         imageLayerLayout.addView(view, freeIndex++);
-        imageLayers.push(new ImageLayer(view));
     }
 
     /**

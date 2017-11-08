@@ -10,8 +10,9 @@ import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
  * dariusz.lelek@gmail.com
  */
 
-class ImageLayer {
+public class ImageLayer {
     private final ImageView imageView;
+    private final int index;
     private Bitmap originalBitmap;
     private float rotation = 0F,
             prevRotation = 0F,
@@ -21,8 +22,9 @@ class ImageLayer {
     private static final float MAX_SCALE = 10.0f;
     private static final float MIN_SCALE = 0.05f;
 
-    ImageLayer(final ImageView imageView) {
+    ImageLayer(final ImageView imageView, int index) {
         this.imageView = imageView;
+        this.index = index;
 
         imageView.post(new Runnable() {
             @Override
@@ -36,6 +38,9 @@ class ImageLayer {
         return originalBitmap;
     }
 
+    public int getIndex() {
+        return index;
+    }
 
     float getScale() {
         return Math.max(Math.min(scale * prevScale, MAX_SCALE), MIN_SCALE);
