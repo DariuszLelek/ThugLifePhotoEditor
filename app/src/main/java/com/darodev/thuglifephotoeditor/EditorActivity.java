@@ -39,6 +39,8 @@ import com.darodev.thuglifephotoeditor.touch.RotationGestureDetector;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
+import com.darodev.thuglifephotoeditor.utility.permission.PermissionControl;
+import com.darodev.thuglifephotoeditor.utility.permission.Permission;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -48,6 +50,8 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private ImageEditor imageEditor;
     private ImageLayerEditor imageLayerEditor;
     private RotationGestureDetector rotationDetector;
+
+    private PermissionControl permissionControl;
 
     private AdView adView;
     private ConfigUtility configUtility;
@@ -59,9 +63,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private Dialog addBitmapDialog;
 
     static final int REQUEST_IMAGE_CAPTURE = 5600;
-    static final int REQUEST_CAMERA_PERMISSION = 5601;
     static final int SELECT_IMAGE = 5602;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         rotationDetector = new RotationGestureDetector(this);
 
         resources = getResources();
+        permissionControl = new PermissionControl(getApplicationContext(), this);
         configUtility = createConfigUtility();
         imageLayerEditor = createImageLayerController();
         imageEditor = new ImageEditor(BitmapHolder.EMPTY, configUtility);
@@ -182,29 +185,43 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     public void onCamera(View view) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (permissionControl.isPermissionGranted(Permission.CAMERA)) {
             askToSave();
             dispatchTakePictureIntent();
         } else {
-            requestCameraPermission();
+            permissionControl.requestPermission(Permission.CAMERA);
         }
     }
 
-    public void onFolder(View view) {
-        askToSave();
-        dispatchSelectPictureIntent();
+    public void onSave(View view) {
+        if (permissionControl.isPermissionGranted(Permission.WRITE_STORAGE)) {
+            saveImage();
+        } else {
+            permissionControl.requestPermission(Permission.WRITE_STORAGE);
+        }
     }
 
-    public void onSave(View view) {
-        Bitmap bitmap = editImageView.getDrawingCache();
-        drawAllBitmapsToCanvas(new Canvas(bitmap));
+    private void askToSave(){
+        if(imageEditor.isImageEdited()){
+            // TODO save ask
+
+        }
+    }
+
+    private void saveImage(){
+        Bitmap imageBitmap = getImageBitmap();
+
+
 
         // TODO save to file
+        processPictureInsert(new BitmapHolder(imageBitmap, 0));
+    }
 
-        // TODO fix rotation issues - save image in one rotation/ change add save
-        int rot = imageEditor.getRotationDegrees();
-
-        processPictureInsert(new BitmapHolder(bitmap, imageEditor.getRotationDegrees()));
+    private Bitmap getImageBitmap(){
+        editImageView.invalidate();
+        Bitmap bitmap = editImageView.getDrawingCache();
+        drawAllBitmapsToCanvas(new Canvas(bitmap));
+        return bitmap;
     }
 
     private void drawAllBitmapsToCanvas(Canvas canvas){
@@ -220,8 +237,9 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         }
     }
 
-    private void requestCameraPermission(){
-        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+    public void onFolder(View view) {
+        askToSave();
+        dispatchSelectPictureIntent();
     }
 
     private void dispatchSelectPictureIntent(){
@@ -234,8 +252,17 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CAMERA_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            dispatchActionBasedOnGrantedPermission(Permission.getByRequestCode(requestCode));
+        }
+    }
+
+    private void dispatchActionBasedOnGrantedPermission(Permission grantedPermission){
+        if(grantedPermission == Permission.CAMERA){
             dispatchTakePictureIntent();
+        }else if(grantedPermission == Permission.WRITE_STORAGE) {
+            saveImage();
         }
     }
 
@@ -255,13 +282,6 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         refreshImageBitmap();
         refreshGui();
-    }
-
-    private void askToSave(){
-        if(imageEditor.isImageEdited()){
-            // TODO save ask
-
-        }
     }
 
     private void refreshImageBitmap(){
