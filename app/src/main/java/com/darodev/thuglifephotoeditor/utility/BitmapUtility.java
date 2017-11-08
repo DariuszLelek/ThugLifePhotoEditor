@@ -30,7 +30,7 @@ public class BitmapUtility {
     private static final Bitmap defaultBitmap = Bitmap.createBitmap(1,1, Bitmap.Config.ARGB_4444);
 
     @NonNull
-    public static BitmapHolder getFromIntentData(Intent intent, Context context) {
+    public static BitmapHolder getFromIntentData(final Intent intent,final Context context) {
         if (intent.getData() == null && intent.getExtras() != null) {
             Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
             return new BitmapHolder(bitmap != null ? bitmap : defaultBitmap, 0);
@@ -64,7 +64,7 @@ public class BitmapUtility {
                 true);
     }
 
-    public static void drawViewBitmapOnCanvas(final Canvas canvas, View view){
+    public static void drawViewBitmapOnCanvas(final Canvas canvas, final View view){
         if(view != null){
             view.invalidate();
             Bitmap bitmap = view.getDrawingCache();
@@ -73,7 +73,7 @@ public class BitmapUtility {
         }
     }
 
-    public static float getLongerSide(Bitmap bitmap){
+    public static float getLongerSide(final Bitmap bitmap){
         return Math.max(bitmap.getHeight(), bitmap.getWidth());
     }
 
@@ -106,7 +106,7 @@ public class BitmapUtility {
         return bitmap;
     }
 
-    public static void setImageBitmap(ImageView imageView, Bitmap bitmap) {
+    public static void setImageBitmap(final ImageView imageView, final Bitmap bitmap) {
         if(imageView != null){
             imageView.setDrawingCacheEnabled(true);
             //recycle(imageView.getDrawingCache());
@@ -114,14 +114,14 @@ public class BitmapUtility {
         }
     }
 
-    public static void recycle(Bitmap bitmap){
+    public static void recycle(final Bitmap bitmap){
         if(bitmap != null){
             bitmap.recycle();
         }
     }
 
     @Deprecated
-    public static boolean canFitInMemory(Bitmap bitmap) {
+    public static boolean canFitInMemory(final Bitmap bitmap) {
         long size = bitmap.getRowBytes() * bitmap.getHeight();
         long allocNativeHeap = Debug.getNativeHeapAllocatedSize();
 

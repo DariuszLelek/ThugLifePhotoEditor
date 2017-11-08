@@ -39,6 +39,7 @@ import com.darodev.thuglifephotoeditor.touch.RotationGestureDetector;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
+import com.darodev.thuglifephotoeditor.utility.ImageSaver;
 import com.darodev.thuglifephotoeditor.utility.permission.PermissionControl;
 import com.darodev.thuglifephotoeditor.utility.permission.Permission;
 import com.google.android.gms.ads.AdRequest;
@@ -52,7 +53,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private RotationGestureDetector rotationDetector;
 
     private PermissionControl permissionControl;
-
+    private ImageSaver imageSaver;
     private AdView adView;
     private ConfigUtility configUtility;
     private Resources resources;
@@ -74,6 +75,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         resources = getResources();
         permissionControl = new PermissionControl(getApplicationContext(), this);
+        imageSaver = new ImageSaver(getApplicationContext());
         configUtility = createConfigUtility();
         imageLayerEditor = createImageLayerController();
         imageEditor = new ImageEditor(configUtility);
@@ -209,13 +211,11 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void saveImage(@NonNull final Bitmap bitmap){
-        //TODO save success
-        if(true){
-            // TODO save to file
+        if(imageSaver.saveImage(bitmap)){
             processPictureInsert(new BitmapHolder(bitmap, 0));
             Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show();
         }
     }
 
