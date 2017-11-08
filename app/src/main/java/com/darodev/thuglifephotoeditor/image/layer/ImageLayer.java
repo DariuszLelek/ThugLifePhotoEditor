@@ -1,18 +1,16 @@
 package com.darodev.thuglifephotoeditor.image.layer;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
-
-import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 
 /**
  * Created by Dariusz Lelek on 11/5/2017.
  * dariusz.lelek@gmail.com
  */
 
-public class ImageLayer {
+class ImageLayer {
     private final ImageView imageView;
-    private final int index;
     private Bitmap originalBitmap;
     private float rotation = 0F,
             prevRotation = 0F,
@@ -22,9 +20,8 @@ public class ImageLayer {
     private static final float MAX_SCALE = 10.0f;
     private static final float MIN_SCALE = 0.05f;
 
-    ImageLayer(final ImageView imageView, int index) {
+    ImageLayer(@NonNull final ImageView imageView) {
         this.imageView = imageView;
-        this.index = index;
 
         imageView.post(new Runnable() {
             @Override
@@ -34,12 +31,9 @@ public class ImageLayer {
         });
     }
 
+    @NonNull
     Bitmap getOriginalBitmap() {
         return originalBitmap;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     float getScale() {

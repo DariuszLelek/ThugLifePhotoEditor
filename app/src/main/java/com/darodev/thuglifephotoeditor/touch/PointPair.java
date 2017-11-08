@@ -1,5 +1,6 @@
 package com.darodev.thuglifephotoeditor.touch;
 
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 
 /**
@@ -18,7 +19,7 @@ public class PointPair {
         this.valid = false;
     }
 
-    public PointPair(MotionEvent event){
+    public PointPair(@NonNull final MotionEvent event){
         if(event.getPointerCount() == 2){
             this.x1 = event.getX(0);
             this.y1 = event.getY(0);
@@ -34,6 +35,10 @@ public class PointPair {
         this.valid = validate();
     }
 
+    private boolean validate(){
+        return x1 > 0 && x2 > 0 && y1 > 0 && y2 > 0;
+    }
+
     public float getCenterX(){
         return Math.min(x1, x2) + Math.abs((x1 - x2) / 2);
     }
@@ -42,14 +47,10 @@ public class PointPair {
         return Math.min(y1, y2) + Math.abs((y1 - y2) / 2);
     }
 
-    public float getScaleResult(PointPair o){
+    public float getScaleResult(@NonNull final PointPair o){
         double firstLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
         double secondLength = Math.sqrt(Math.pow(o.x1 - o.x2, 2) + Math.pow(o.y1 - o.y2, 2));
         return (float) (secondLength/firstLength);
-    }
-
-    private boolean validate(){
-        return x1 > 0 && x2 > 0 && y1 > 0 && y2 > 0;
     }
 
     public boolean isValid(){

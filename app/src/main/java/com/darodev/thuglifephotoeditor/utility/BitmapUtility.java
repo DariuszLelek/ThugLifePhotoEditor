@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -30,7 +31,7 @@ public class BitmapUtility {
     private static final Bitmap defaultBitmap = Bitmap.createBitmap(1,1, Bitmap.Config.ARGB_4444);
 
     @NonNull
-    public static BitmapHolder getFromIntentData(final Intent intent,final Context context) {
+    public static BitmapHolder getFromIntentData(@NonNull final Intent intent, @NonNull final Context context) {
         if (intent.getData() == null && intent.getExtras() != null) {
             Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
             return new BitmapHolder(bitmap != null ? bitmap : defaultBitmap, 0);
@@ -64,7 +65,7 @@ public class BitmapUtility {
                 true);
     }
 
-    public static void drawViewBitmapOnCanvas(final Canvas canvas, final View view){
+    public static void drawViewBitmapOnCanvas(@NonNull final Canvas canvas, @Nullable final View view){
         if(view != null){
             view.invalidate();
             Bitmap bitmap = view.getDrawingCache();
@@ -73,11 +74,11 @@ public class BitmapUtility {
         }
     }
 
-    public static float getLongerSide(final Bitmap bitmap){
+    public static float getLongerSide(@NonNull final Bitmap bitmap){
         return Math.max(bitmap.getHeight(), bitmap.getWidth());
     }
 
-    public static Bitmap manipulate(final Bitmap bitmap, float rotationAngleDegree, float scale, ImageCenter imageCenter){
+    public static Bitmap manipulate(@NonNull final Bitmap bitmap, float rotationAngleDegree, float scale, @NonNull final ImageCenter imageCenter){
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
@@ -106,15 +107,14 @@ public class BitmapUtility {
         return bitmap;
     }
 
-    public static void setImageBitmap(final ImageView imageView, final Bitmap bitmap) {
+    public static void setImageBitmap(@Nullable final ImageView imageView, @NonNull final Bitmap bitmap) {
         if(imageView != null){
             imageView.setDrawingCacheEnabled(true);
-            //recycle(imageView.getDrawingCache());
             imageView.setImageBitmap(bitmap);
         }
     }
 
-    public static void recycle(final Bitmap bitmap){
+    private static void recycle(@Nullable final Bitmap bitmap){
         if(bitmap != null){
             bitmap.recycle();
         }

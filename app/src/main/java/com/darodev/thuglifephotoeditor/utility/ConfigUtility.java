@@ -2,6 +2,7 @@ package com.darodev.thuglifephotoeditor.utility;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 
 import com.darodev.thuglifephotoeditor.R;
 
@@ -20,7 +21,7 @@ public class ConfigUtility {
 
     public static final float DISABLED_BUTTON_ALPHA = 0.2F;
 
-    public ConfigUtility(Resources resources, SharedPreferences preferences) {
+    public ConfigUtility(@NonNull final Resources resources, @NonNull final SharedPreferences preferences) {
         this.resources = resources;
         this.preferences = preferences;
     }

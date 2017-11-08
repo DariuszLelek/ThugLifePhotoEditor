@@ -1,6 +1,7 @@
 package com.darodev.thuglifephotoeditor.image;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 
 import com.darodev.thuglifephotoeditor.R;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
@@ -19,11 +20,11 @@ public class ImageEditor {
 
     private final ConfigUtility configUtility;
 
-    public ImageEditor(ConfigUtility configUtility) {
+    public ImageEditor(@NonNull final ConfigUtility configUtility) {
         this.configUtility = configUtility;
     }
 
-    public ImageEditor(BitmapHolder bitmapHolder, ConfigUtility configUtility) {
+    public ImageEditor(@NonNull final BitmapHolder bitmapHolder, @NonNull final ConfigUtility configUtility) {
         this.configUtility = configUtility;
 
         this.image = bitmapHolder.getBitmap();
@@ -38,18 +39,6 @@ public class ImageEditor {
         }
     }
 
-    private void rotateImageToDefaultOrientation(){
-        image = BitmapUtility.rotate(image, rotationDegrees);
-    }
-
-    private void resetRotation(){
-        this.rotationDegrees = 0;
-    }
-
-    public int getRotationDegrees(){
-        return rotationDegrees;
-    }
-
     private void scaleBitmapToFitView(){
         float maxWidth = configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
         float scale =  maxWidth / BitmapUtility.getLongerSide(image);
@@ -58,6 +47,14 @@ public class ImageEditor {
 
     public boolean isImageRotated(){
         return rotationDegrees > 0;
+    }
+
+    private void rotateImageToDefaultOrientation(){
+        image = BitmapUtility.rotate(image, rotationDegrees);
+    }
+
+    private void resetRotation(){
+        this.rotationDegrees = 0;
     }
 
     public boolean isImageEdited() {
@@ -73,17 +70,17 @@ public class ImageEditor {
     }
 
     public void rotateImage() {
-        image = BitmapUtility.rotate(image, rotationDegrees > 0 ? -90 : 90);
-        rotationDegrees = rotationDegrees > 0 ? 0 : 90;
-        imageEdited = true;
+        if(image != null){
+            image = BitmapUtility.rotate(image, rotationDegrees > 0 ? -90 : 90);
+            rotationDegrees = rotationDegrees > 0 ? 0 : 90;
+        }
     }
 
-    // TODO public?
-    public void recycleBitmap(){
+    public void recycle(){
         if(image != null){
             image.recycle();
         }
-
         image = null;
+        System.gc();
     }
 }

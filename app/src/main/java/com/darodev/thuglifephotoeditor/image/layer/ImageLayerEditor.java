@@ -33,7 +33,7 @@ public class ImageLayerEditor {
 
     public ImageLayerEditor(Context context, FrameLayout imageLayerLayout) {
         this.imageLayerLayout = imageLayerLayout;
-        this.emptyLayer = new ImageLayer(new ImageView(context), 0);
+        this.emptyLayer = new ImageLayer(new ImageView(context));
 
         reset();
     }
@@ -108,10 +108,6 @@ public class ImageLayerEditor {
         return !imageLayers.isEmpty();
     }
 
-    public ImageLayer getTopLayer(){
-        return hasTopLayer() ? imageLayers.pop() : null;
-    }
-
     private void updateEditTime(){
         lastEditTime = DateTime.now();
     }
@@ -164,7 +160,7 @@ public class ImageLayerEditor {
      * Add new Layer over image with selected Bitmap
      */
     public void addLayer(ImageView view){
-        imageLayers.push(new ImageLayer(view, freeIndex));
+        imageLayers.push(new ImageLayer(view));
         imageLayerLayout.addView(view, freeIndex++);
     }
 

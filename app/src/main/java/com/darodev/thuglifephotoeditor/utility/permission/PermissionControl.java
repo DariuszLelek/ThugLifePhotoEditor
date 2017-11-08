@@ -1,6 +1,5 @@
 package com.darodev.thuglifephotoeditor.utility.permission;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -17,7 +16,7 @@ public class PermissionControl {
     private final Context context;
     private final Activity activity;
 
-    public PermissionControl(final Context context, final Activity activity) {
+    public PermissionControl(final @NonNull Context context, final @NonNull Activity activity) {
         this.context = context;
         this.activity = activity;
     }

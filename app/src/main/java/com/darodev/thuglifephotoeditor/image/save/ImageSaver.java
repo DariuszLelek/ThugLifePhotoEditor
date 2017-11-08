@@ -2,6 +2,8 @@ package com.darodev.thuglifephotoeditor.image.save;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -23,7 +25,7 @@ public class ImageSaver {
     private static final Bitmap.CompressFormat IMAGE_FORMAT = Bitmap.CompressFormat.JPEG;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd_HH:mm:ss");
 
-    public boolean saveImage(Bitmap bitmap) {
+    public boolean saveImage(@NonNull final Bitmap bitmap) {
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File filePath = new File(directory, IMAGE_PREFIX + DATE_TIME_FORMATTER.print(DateTime.now()) + IMAGE_EXTENSION);
 

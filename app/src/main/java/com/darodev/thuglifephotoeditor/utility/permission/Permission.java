@@ -1,6 +1,7 @@
 package com.darodev.thuglifephotoeditor.utility.permission;
 
 import android.Manifest;
+import android.support.annotation.NonNull;
 
 /**
  * Created by Dariusz Lelek on 11/8/2017.
@@ -28,6 +29,7 @@ public enum Permission {
         return requestCode;
     }
 
+    @NonNull
     public static Permission getByRequestCode(int requestCode){
         for(Permission permission : values()){
             if(permission.getRequestCode() == requestCode){

@@ -3,7 +3,7 @@ package com.darodev.thuglifephotoeditor.touch;
 import android.view.MotionEvent;
 
 /**
- * Created by Dariusz Lelek on 11/5/2017.
+ * This class is from online resources
  * dariusz.lelek@gmail.com
  */
 
@@ -65,7 +65,6 @@ public class RotationGestureDetector {
                     break;
             }
         } catch (IllegalArgumentException ex) {
-            // TODO Log this
             // This is thrown when multitouch changes for example: 3 pointers -> 2 pointers
             // After that rotation detection is not working. But starts working once touch event is registered again.
         }
