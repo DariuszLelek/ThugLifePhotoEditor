@@ -16,6 +16,7 @@
             android:id="@+id/view_edit_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/white"
             android:contentDescription="@string/content_desc_picture"
             app:srcCompat="@android:color/transparent"/>
 

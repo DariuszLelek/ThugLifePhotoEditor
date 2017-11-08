@@ -1,6 +1,5 @@
 package com.darodev.thuglifephotoeditor;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,8 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -39,7 +36,7 @@ import com.darodev.thuglifephotoeditor.touch.RotationGestureDetector;
 import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
-import com.darodev.thuglifephotoeditor.utility.ImageSaver;
+import com.darodev.thuglifephotoeditor.image.save.ImageSaver;
 import com.darodev.thuglifephotoeditor.utility.permission.PermissionControl;
 import com.darodev.thuglifephotoeditor.utility.permission.Permission;
 import com.google.android.gms.ads.AdRequest;
@@ -75,7 +72,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
         resources = getResources();
         permissionControl = new PermissionControl(getApplicationContext(), this);
-        imageSaver = new ImageSaver(getApplicationContext());
+        imageSaver = new ImageSaver();
         configUtility = createConfigUtility();
         imageLayerEditor = createImageLayerController();
         imageEditor = new ImageEditor(configUtility);
@@ -205,6 +202,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
     private void askToSave(){
         if(imageEditor.isImageEdited()){
+
             // TODO save ask
 
         }
