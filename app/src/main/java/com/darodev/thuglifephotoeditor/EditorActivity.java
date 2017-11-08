@@ -328,7 +328,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void drawAllBitmapsToCanvas(Canvas canvas){
-        for(int index = imageLayerEditor.getFreeIndex(); index > 0; index --){
+        for(int index = 1; index < imageLayerEditor.getFreeIndex(); index ++){
             BitmapUtility.drawViewBitmapOnCanvas(canvas, imageLayerEditor.getImageLayerLayout().getChildAt(index));
         }
     }
