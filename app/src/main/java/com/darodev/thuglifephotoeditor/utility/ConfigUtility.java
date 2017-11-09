@@ -30,13 +30,23 @@ public class ConfigUtility {
         return preferences.getBoolean(getKey(R.string.key_ads_enabled), DefaultConfig.ADS_ENABLED.getBooleanValue());
     }
 
-    public int get(int keyId, int defaultValue){
+    public int getInt(int keyId, int defaultValue){
         return preferences.getInt(getKey(keyId), defaultValue);
     }
 
-    public void save(int keyId, int value){
+    public boolean getBoolean(int keyId, boolean defaultValue){
+        return preferences.getBoolean(getKey(keyId), defaultValue);
+    }
+
+    public void saveInt(int keyId, int value){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(getKey(keyId), value);
+        editor.apply();
+    }
+
+    public void saveBoolean(int keyId, boolean value){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(getKey(keyId), value);
         editor.apply();
     }
 

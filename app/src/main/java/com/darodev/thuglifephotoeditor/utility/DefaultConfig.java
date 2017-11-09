@@ -7,7 +7,8 @@ package com.darodev.thuglifephotoeditor.utility;
 
 public enum DefaultConfig {
     ADS_ENABLED(1, false),
-    IMAGE_MAX_WIDTH(1800, false);
+    IMAGE_MAX_WIDTH(1800, false),
+    INSTRUCTIONS_VISIBLE(1, true);
 
     private final int intValue;
     private final boolean booleanValue;

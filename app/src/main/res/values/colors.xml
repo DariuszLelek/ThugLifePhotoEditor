@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
-    <color name="btn_tint">#f41f1f1f</color>
-    <color name="gui_bar_back">#45ffffff</color>
+    <color name="btn_back_tint">#f4000000</color>
+    <color name="gui_bar_back">#001d1d1d</color>
+    <color name="gui_edit_info_back">#b4ffffff</color>
+    <color name="app_back">#78ffffff</color>
 
     <color name="edit_mode_label">#65000000</color>
     <color name="edit_mode_label_background">#65000000</color>
+
+    <color name="btn_folder">#FDE74C</color>
+    <color name="btn_add">#9BC53D</color>
+    <color name="btn_remove">#E55934</color>
+    <color name="btn_camera">#5BC0EB</color>
+    <color name="btn_save">#5BC0EB</color>
+    <color name="btn_rotate">#5BC0EB</color>
 
 </resources>

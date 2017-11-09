@@ -1,12 +1,13 @@
 <resources>
-    <string name="app_name">ThugLifePhotoEditor</string>
+    <string name="app_name">Thug Life Editor</string>
 
     <!--prefs-->
     <string name="key_ads_enabled">adsEnabled</string>
     <string name="key_edit_image_width">editImageWidth</string>
     <string name="key_edit_image_height">editImageWeight</string>
+    <string name="key_instructions_visible">instructionsVisible</string>
 
-
+    <!--content_description-->
     <string name="content_desc_picture">Picture to edit</string>
     <string name="content_desc_camera">Camera</string>
     <string name="content_desc_save">Picture to edit</string>
@@ -15,6 +16,9 @@
     <string name="content_desc_remove">Remove Bitmap</string>
     <string name="content_desc_rotate">Rotate</string>
     <string name="content_desc_folder">Folder</string>
+    <string name="content_desc_instruction">Instructions</string>
+
+    <!--other-->
     <string name="default_layer">Default layer to be copied for inserting new bitmaps</string>
     <string name="bitmap">Bitmap</string>
 </resources>

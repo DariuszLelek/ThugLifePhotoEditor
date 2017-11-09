@@ -39,6 +39,7 @@ import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
 import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
 import com.darodev.thuglifephotoeditor.touch.PointPair;
 import com.darodev.thuglifephotoeditor.image.save.ImageSaver;
+import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
 import com.darodev.thuglifephotoeditor.utility.permission.PermissionControl;
 import com.darodev.thuglifephotoeditor.utility.permission.Permission;
 import com.google.android.gms.ads.AdRequest;
@@ -58,7 +59,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private AdView adView;
     private ConfigUtility configUtility;
     private Resources resources;
-    private ImageView editImageView;
+    private ImageView editImageView, instructionsImageView;
     private ImageButton btnRotate, btnRemove, btnSave;
     private TextView textEditMode;
     private LinearLayout guiLayoutTopBar, guiLayoutBottomBar;
@@ -86,6 +87,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         guiLayoutTopBar = findViewById(R.id.layout_gui_top_bar);
         guiLayoutBottomBar = findViewById(R.id.layout_gui_bottom_bar);
         editImageView = findViewById(R.id.view_edit_image);
+        instructionsImageView = findViewById(R.id.view_image_instructions);
 
         prepareEditImageView();
         prepareLayerListener();
@@ -114,7 +116,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     }
 
     private void saveEditImageDimensions(){
-        configUtility.save(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
+        configUtility.saveInt(R.string.key_edit_image_width, editImageView.getMeasuredWidth());
     }
 
     private void prepareLayerListener() {
@@ -127,7 +129,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                     updateEditModeDisplay();
 
                     if (motionEvent.getAction() == MotionEvent.ACTION_DOWN || motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                        updateGuiBarsVisibility(false);
+                        updateGuiElementsVisibility(false);
                         imageLayerEditor.setCurrentEditModeByTouchCount(motionEvent.getPointerCount());
                         updateEditModeDisplay();
                         processMotionEvent(motionEvent);
@@ -138,7 +140,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
                             imageLayerEditor.updatePrevScaleRotation();
                             imageLayerEditor.changeCurrentEditMode(ImageEditMode.NONE);
                             updateEditModeDisplay();
-                            updateGuiBarsVisibility(true);
+                            updateGuiElementsVisibility(true);
                         }
                         return false;
                     }
@@ -163,11 +165,15 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         }
     }
 
-    private void updateGuiBarsVisibility(boolean visible){
+    private void updateGuiElementsVisibility(boolean visible){
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
         if(guiLayoutTopBar.getVisibility() != visibility){
             guiLayoutBottomBar.setVisibility(visibility);
             guiLayoutTopBar.setVisibility(visibility);
+        }
+        visibility = visible ? View.INVISIBLE : View.VISIBLE;
+        if(textEditMode.getVisibility() != visibility){
+            textEditMode.setVisibility(visibility);
         }
     }
 
@@ -208,6 +214,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
         updateRemoveBitmapButton();
         updateEditModeDisplay();
         updateSaveButton();
+        updateInstructionsVisible();
     }
 
     private void updateRotateButton() {
@@ -229,6 +236,15 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
     private void setImageButtonEnabled(ImageButton button, boolean enabled){
         button.setAlpha(enabled ? 1F : ConfigUtility.DISABLED_BUTTON_ALPHA);
         button.setEnabled(enabled);
+    }
+
+    private void updateInstructionsVisible(){
+        if(imageEditor.hasImage() || imageLayerEditor.hasTopLayer()){
+            configUtility.saveBoolean(R.string.key_instructions_visible, false);
+        }
+
+        boolean visible = configUtility.getBoolean(R.string.key_instructions_visible, DefaultConfig.INSTRUCTIONS_VISIBLE.getBooleanValue());
+        instructionsImageView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void onCamera(View view) {
@@ -259,7 +275,7 @@ public class EditorActivity extends AppCompatActivity implements RotationGesture
 
     private void askToSave() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Do you want to save image?");
+        builder.setTitle("Save Image?");
 
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

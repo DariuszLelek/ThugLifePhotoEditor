@@ -40,7 +40,7 @@ public class ImageEditor {
     }
 
     private void scaleBitmapToFitView(){
-        float maxWidth = configUtility.get(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
+        float maxWidth = configUtility.getInt(R.string.key_edit_image_width, DefaultConfig.IMAGE_MAX_WIDTH.getIntValue());
         float scale =  maxWidth / BitmapUtility.getLongerSide(image);
         image = BitmapUtility.getScaledBitmap(image, scale);
     }
@@ -68,6 +68,8 @@ public class ImageEditor {
     public Bitmap getImage() {
         return image;
     }
+
+    public boolean hasImage(){return image != null; }
 
     public void rotateImage() {
         if(image != null){

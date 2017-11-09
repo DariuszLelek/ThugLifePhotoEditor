@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="btn_padding_all">8dp</dimen>
+
+    <item name="btn_alpha" format="float" type="dimen">1.0</item>
 </resources>
