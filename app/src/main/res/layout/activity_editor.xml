@@ -109,6 +109,7 @@
                         android:padding="@dimen/btn_padding_all"
                         android:scaleType="fitCenter"
                         android:tint="@color/btn_tint"
+                        android:visibility="invisible"
                         app:srcCompat="@drawable/ic_share_black_160dp"/>
 
                     <ImageButton
