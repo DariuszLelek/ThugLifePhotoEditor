@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Thug Life Editor</string>
+    <string name="app_name">Thug Life</string>
 
     <!--prefs-->
     <string name="key_ads_enabled">adsEnabled</string>
