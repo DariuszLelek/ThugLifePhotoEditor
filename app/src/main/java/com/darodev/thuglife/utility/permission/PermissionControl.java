@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.utility.permission;
+package com.darodev.thuglife.utility.permission;
 
 import android.app.Activity;
 import android.content.Context;

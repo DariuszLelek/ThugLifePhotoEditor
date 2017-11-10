@@ -1,6 +1,6 @@
-package com.darodev.thuglifephotoeditor.image;
+package com.darodev.thuglife.image;
 
-import com.darodev.thuglifephotoeditor.R;
+import com.darodev.thuglife.R;
 
 /**
  * Created by Dariusz Lelek on 11/7/2017.

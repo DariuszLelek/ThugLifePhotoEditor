@@ -1,10 +1,10 @@
-package com.darodev.thuglifephotoeditor.utility;
+package com.darodev.thuglife.utility;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
-import com.darodev.thuglifephotoeditor.R;
+import com.darodev.thuglife.R;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

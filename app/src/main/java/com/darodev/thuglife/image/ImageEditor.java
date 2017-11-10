@@ -1,12 +1,12 @@
-package com.darodev.thuglifephotoeditor.image;
+package com.darodev.thuglife.image;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import com.darodev.thuglifephotoeditor.R;
-import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
-import com.darodev.thuglifephotoeditor.utility.ConfigUtility;
-import com.darodev.thuglifephotoeditor.utility.DefaultConfig;
+import com.darodev.thuglife.R;
+import com.darodev.thuglife.utility.BitmapUtility;
+import com.darodev.thuglife.utility.ConfigUtility;
+import com.darodev.thuglife.utility.DefaultConfig;
 
 /**
  * Created by Dariusz Lelek on 10/31/2017.

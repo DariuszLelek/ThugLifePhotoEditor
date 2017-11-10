@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.image.layer;
+package com.darodev.thuglife.image.layer;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;

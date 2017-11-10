@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.utility.permission;
+package com.darodev.thuglife.utility.permission;
 
 import android.Manifest;
 import android.support.annotation.NonNull;

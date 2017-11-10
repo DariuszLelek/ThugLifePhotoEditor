@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.utility;
+package com.darodev.thuglife.utility;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.darodev.thuglifephotoeditor.image.BitmapHolder;
-import com.darodev.thuglifephotoeditor.image.layer.ImageCenter;
+import com.darodev.thuglife.image.BitmapHolder;
+import com.darodev.thuglife.image.layer.ImageCenter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.touch;
+package com.darodev.thuglife.touch;
 
 import android.view.MotionEvent;
 

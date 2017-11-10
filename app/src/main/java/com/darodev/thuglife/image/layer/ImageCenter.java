@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.image.layer;
+package com.darodev.thuglife.image.layer;
 
 /**
  * Created by Dariusz Lelek on 11/5/2017.

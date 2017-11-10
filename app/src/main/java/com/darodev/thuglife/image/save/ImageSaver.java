@@ -1,4 +1,4 @@
-package com.darodev.thuglifephotoeditor.image.save;
+package com.darodev.thuglife.image.save;
 
 import android.graphics.Bitmap;
 import android.os.Environment;

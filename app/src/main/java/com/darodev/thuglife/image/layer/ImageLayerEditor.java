@@ -1,13 +1,13 @@
-package com.darodev.thuglifephotoeditor.image.layer;
+package com.darodev.thuglife.image.layer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.darodev.thuglifephotoeditor.image.ImageEditMode;
-import com.darodev.thuglifephotoeditor.touch.PointPair;
-import com.darodev.thuglifephotoeditor.utility.BitmapUtility;
+import com.darodev.thuglife.image.ImageEditMode;
+import com.darodev.thuglife.touch.PointPair;
+import com.darodev.thuglife.utility.BitmapUtility;
 
 import org.joda.time.DateTime;
 
